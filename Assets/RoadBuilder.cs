@@ -5,7 +5,7 @@ using UnityEngine;
 public class RoadBuilder : MonoBehaviour
 {
 
-	public Material matRoad;
+	public GameObject roadPrefab;
 
 	void Update ()
 	{
@@ -45,17 +45,11 @@ public class RoadBuilder : MonoBehaviour
 
 
 
-		GameObject obj = new GameObject ("road", typeof(MeshFilter), typeof(MeshRenderer));
-		obj.transform.position = new Vector3 (0, 0.01f, 0);
-		obj.transform.Translate (position);
+		Vector3 roadPosition = position + new Vector3 (0, 0.01f, 0);
+		GameObject obj = Instantiate (roadPrefab, roadPosition, Quaternion.identity);
 
 		MeshFilter objMeshFilter = obj.GetComponent<MeshFilter> ();
 		objMeshFilter.mesh = mesh;
-		MeshRenderer objMeshRenderer = obj.GetComponent<MeshRenderer> ();
-		objMeshRenderer.material = matRoad;
-		objMeshRenderer.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
-
-
 
 	}
 

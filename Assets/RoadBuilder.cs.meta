@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: 10fda196baf74457f9d5261c987f87e5
-timeCreated: 1514591815
+timeCreated: 1514594161
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - matRoad: {fileID: 2100000, guid: 4d4b578c30f8040d4bf3aea929560a26, type: 2}
+  - roadPrefab: {fileID: 1102602806699128, guid: b29a666a8000d446f94cc1b30d8c008c,
+      type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
