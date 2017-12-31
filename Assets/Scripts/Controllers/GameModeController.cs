@@ -1,0 +1,84 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class GameModeController : MonoBehaviour
+{
+
+	public enum GameMode
+	{
+		NOT_DEFINED,
+		ROAD_CONSTRUCTION,
+		ROAD_ADJUSTMENT}
+
+	;
+
+
+
+	public GameMode defaultGameMode;
+
+	private GameMode currentGameMode;
+	private MonoBehaviour currentActiveController;
+
+
+
+	public GameMode GetCurrentGameMode ()
+	{
+		return currentGameMode;
+	}
+
+	// Use this for initialization
+	void Start ()
+	{
+
+		setGameMode (defaultGameMode);
+
+		
+	}
+	
+	// Update is called once per frame
+	void Update ()
+	{
+
+		if (Input.GetKeyDown (KeyCode.C)) {
+			setGameMode (GameMode.ROAD_CONSTRUCTION);
+		} else if (Input.GetKeyDown (KeyCode.A)) {
+			setGameMode (GameMode.ROAD_ADJUSTMENT);
+		}
+	}
+
+	void setGameMode (GameMode gameMode)
+	{
+
+		// do nothing if the modes are equal
+		if (currentGameMode == gameMode) {
+			return;
+		}
+
+
+		Debug.LogFormat ("Game mode set to {0}", gameMode);
+
+		// disable current mode if there's any
+		if (this.currentActiveController) {
+			this.currentActiveController.enabled = false;
+		}
+
+
+		// set property
+		this.currentGameMode = gameMode;
+
+		// set active controller
+		switch (gameMode) {
+		case GameMode.ROAD_ADJUSTMENT:
+			this.currentActiveController = GetComponent<RoadAdjustmentController> ();
+			break;
+		case GameMode.ROAD_CONSTRUCTION:
+			this.currentActiveController = GetComponent<RoadConstructionController> ();
+			break;
+		}
+
+		// enable current component
+		this.currentActiveController.enabled = true;
+	}
+
+}
