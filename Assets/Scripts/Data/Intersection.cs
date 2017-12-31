@@ -34,6 +34,8 @@ public class Intersection
 		// TODO Performance optimizaiton: this always build an empty game object
 		this.gameObject = this.builder.BuildIntersection (this);
 
+		allInstances.Add (this);
+
 	}
 
 	// this method updates the game object only, without resetting the roads it connects to
@@ -61,4 +63,61 @@ public class Intersection
 		this.connectedRoads.Add (road);
 		this.gameObject = this.builder.UpdateIntersection (this, this.gameObject);
 	}
+
+	public void DeleteRoad (Road road)
+	{
+		if (!this.connectedRoads.Contains (road)) {
+			Debug.LogWarning ("Attemp to delete non-existent road");
+		}
+		this.connectedRoads.Remove (road);
+	}
+
+	public void connectToIntersection (Intersection intersection)
+	{
+		new Road (this, intersection);
+	}
+
+	public void DeleteIntersection ()
+	{
+		this.connectedRoads.ForEach (rd => rd.DeleteRoad ());
+		GameObject.Destroy (this.gameObject);
+		allInstances.Remove (this);
+		
+	}
+
+	public void RemoveConnectionTo (Intersection intersection)
+	{
+		foreach (Road road in connectedRoads) {
+			switch (road.typeOfIntersection (this)) {
+			case Road.IntersectionClass.FROM:
+				if (intersection == road.toIntersection) {
+					road.DeleteRoad ();
+				}
+				break;
+			case Road.IntersectionClass.TO:
+				if (intersection == road.fromIntersection) {
+					road.DeleteRoad ();
+				}
+				break;
+			}
+		}
+	}
+
+	private static List<Intersection> allInstances;
+
+	static Intersection ()
+	{
+		allInstances = new List<Intersection> ();
+	}
+
+	public static Intersection IntersectionForGameObject (GameObject gameObject)
+	{
+		foreach (Intersection inter in allInstances) {
+			if (inter.gameObject == gameObject) {
+				return inter;
+			}
+		}
+		return null;
+	}
+
 }

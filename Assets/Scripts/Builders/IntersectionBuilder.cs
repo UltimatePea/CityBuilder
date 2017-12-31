@@ -151,6 +151,9 @@ public class IntersectionBuilder : MonoBehaviour
 		MeshFilter objMeshFilter = intersectionObj.GetComponent<MeshFilter> ();
 		objMeshFilter.mesh = mesh;
 
+		MeshCollider objMeshCollider = intersectionObj.GetComponent<MeshCollider> ();
+		objMeshCollider.sharedMesh = mesh;
+
 		return intersectionObj;
 	}
 

@@ -61,4 +61,23 @@ public class Road
 			return IntersectionClass.NONE;
 		}
 	}
+
+	public void DeleteRoad ()
+	{
+		GameObject.Destroy (this.gameObject);
+		this.fromIntersection.DeleteRoad (this);
+		this.toIntersection.DeleteRoad (this);
+		
+	}
+
+	public Intersection otherIntersection (Intersection intersection)
+	{
+		switch (typeOfIntersection (intersection)) {
+		case IntersectionClass.FROM:
+			return toIntersection;
+		case IntersectionClass.TO:
+			return fromIntersection;
+		}
+		return null;
+	}
 }
