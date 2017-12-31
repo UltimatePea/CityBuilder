@@ -10,7 +10,7 @@ public class RoadConstructionController : MonoBehaviour
 	private Intersection startIntersection;
 	private Intersection endIntersection;
 
-	private GameObject temp;
+	private Road temp;
 
 	void Update ()
 	{
@@ -24,6 +24,7 @@ public class RoadConstructionController : MonoBehaviour
 			// create and destroy tempRoad on mouse drag and mouse release
 			if (this.endIntersection == null) {
 				this.endIntersection = new Intersection (getMousePositionOnPlane ());
+				this.temp = new Road (this.startIntersection, this.endIntersection);
 			} else {
 				this.endIntersection.position = getMousePositionOnPlane ();
 			}
@@ -31,7 +32,8 @@ public class RoadConstructionController : MonoBehaviour
 
 		// temp road becomes permanent when the user releases the mouse
 		if (Input.GetMouseButtonUp (0)) {
-			new Road (this.startIntersection, this.endIntersection);
+
+			this.temp = null;
 			this.startIntersection = null;
 			this.endIntersection = null;
 		}

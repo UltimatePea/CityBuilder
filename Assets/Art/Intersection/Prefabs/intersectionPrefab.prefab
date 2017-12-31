@@ -22,7 +22,7 @@ GameObject:
   - component: {fileID: 33967124750928736}
   - component: {fileID: 23107932465110582}
   m_Layer: 0
-  m_Name: roadEndPrefab
+  m_Name: intersectionPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -55,7 +55,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: b1a4ce17a70d246f7ac4eb6f5cccf633, type: 2}
+  - {fileID: 2100000, guid: 7170873c59d4b471c91a7c43586086a0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

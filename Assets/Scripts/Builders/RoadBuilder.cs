@@ -59,13 +59,21 @@ public class RoadBuilder : MonoBehaviour
 
 
 		Vector3 roadPosition = start + new Vector3 (0, 0.01f, 0);
+		Debug.Log ("instantiating road object");
 		GameObject obj = Instantiate (roadPrefab, roadPosition, rotation);
+//		obj.transform.parent = road.fromIntersection.GetGameObject ().transform;
 
 
 		MeshFilter objMeshFilter = obj.GetComponent<MeshFilter> ();
 		objMeshFilter.mesh = mesh;	
 
 		return obj;
+	}
+
+	public GameObject UpdateRoad (Road road, GameObject obj)
+	{
+		Destroy (obj);
+		return BuildRoad (road);
 	}
 
 
