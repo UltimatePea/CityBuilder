@@ -9,12 +9,12 @@ public class Road
 	public Intersection fromIntersection;
 	public Intersection toIntersection;
 
-	enum IntersectionClass
+	public enum IntersectionClass
 	{
-FROM,
+		FROM,
 		TO,
 		NONE
-/* Intersection ot part of this road */}
+		/* Intersection ot part of this road */}
 
 	;
 
@@ -40,27 +40,30 @@ public class Intersection
 		set {
 			_position = value;
 			// TODO update all roads mesh and this's mesh;
+			this.gameObject = builder.UpdateIntersection (this, gameObject);
 		}
 	}
 
-	private GameObject gameObject; // the game object we own
+	private GameObject gameObject;
+	// the game object we own
 
 	// reference to the global builder
 	private IntersectionBuilder builder;
 
-	public Intersection (Vector3 position, Road[] connectedRoads = {})
+	public Intersection (Vector3 position)
 	{
-		this.connectedRoads = new ArrayList (connectedRoads);
+		this.connectedRoads = new ArrayList ();
 		this.position = position;
 
 		this.builder = GameObject.FindWithTag ("Builder").GetComponent<IntersectionBuilder> ();
-		this.gameObject = this.builder.BuildIntersection(this);
+		// TODO Performance optimizaiton: this always build an empty game object
+		this.gameObject = this.builder.BuildIntersection (this);
 
 	}
 
 	public Road[] getConnectedRoads ()
 	{
-		return this.connectedRoads.ToArray ();
+		return this.connectedRoads.ToArray () as Road[];
 	}
 }
 
