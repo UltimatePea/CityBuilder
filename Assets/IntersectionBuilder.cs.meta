@@ -1,14 +1,14 @@
 fileFormatVersion: 2
 guid: 526742e17a344451fa8149c16b052846
-timeCreated: 1514683515
+timeCreated: 1514693754
 licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
   defaultReferences:
-  - fourWayIntersectionPrefab: {fileID: 1102602806699128, guid: 4ced7e3a214f74dc692d048f8b975a86,
+  - fourWayIntersectionPrefab: {fileID: 1102602806699128, guid: 83dbdb8b4a75a4fbf89b8544ca22f273,
       type: 2}
-  - oneWayIntersectionPrefab: {fileID: 1102602806699128, guid: 83dbdb8b4a75a4fbf89b8544ca22f273,
+  - oneWayIntersectionPrefab: {fileID: 1102602806699128, guid: 4ced7e3a214f74dc692d048f8b975a86,
       type: 2}
   executionOrder: 0
   icon: {instanceID: 0}

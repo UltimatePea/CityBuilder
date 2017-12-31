@@ -127,23 +127,25 @@ public class IntersectionBuilder : MonoBehaviour
 		case Road.IntersectionClass.FROM:
 			position = connectedRoad.fromIntersection.position;
 			orientation = Quaternion.FromToRotation (Vector3.right, 
-				connectedRoad.toIntersection.position - connectedRoad.fromIntersection.position);
+				connectedRoad.fromIntersection.position - connectedRoad.toIntersection.position);
 			break;
 		case Road.IntersectionClass.TO:
 			position = connectedRoad.toIntersection.position;
 			orientation = Quaternion.FromToRotation (Vector3.right,
-				connectedRoad.fromIntersection.position - connectedRoad.toIntersection.position);
+				connectedRoad.toIntersection.position - connectedRoad.fromIntersection.position);
 			break;
 		case Road.IntersectionClass.NONE:
 		default:
 			// this shouldnever happen
-			Debug.Assert (false);
+			Debug.LogError ("Intersection are not connected to road, but road connected to intersection");
 			position = Vector3.zero;
 			orientation = Quaternion.identity;
 			break;
 		}
 
 
+		// move up a little bit
+		position = position + new Vector3 (0, 0.01f, 0);
 
 		GameObject intersectionObj = Instantiate (oneWayIntersectionPrefab, position, orientation);
 		MeshFilter objMeshFilter = intersectionObj.GetComponent<MeshFilter> ();

@@ -9,6 +9,22 @@ public class Road
 	public Intersection fromIntersection;
 	public Intersection toIntersection;
 
+	private RoadBuilder builder;
+
+	public Road (Intersection fromIntersection, Intersection toIntersection)
+	{
+		this.fromIntersection = fromIntersection;
+		this.toIntersection = toIntersection;
+
+		fromIntersection.connectToRoad (this);
+		toIntersection.connectToRoad (this);
+
+		this.builder = GameObject.FindWithTag ("Builder").GetComponent<RoadBuilder> ();
+		this.builder.BuildRoad (this);
+
+
+	}
+
 	public enum IntersectionClass
 	{
 		FROM,
@@ -53,7 +69,7 @@ public class Intersection
 	public Intersection (Vector3 position)
 	{
 		this.connectedRoads = new ArrayList ();
-		this.position = position;
+		_position = position;
 
 		this.builder = GameObject.FindWithTag ("Builder").GetComponent<IntersectionBuilder> ();
 		// TODO Performance optimizaiton: this always build an empty game object
@@ -63,7 +79,17 @@ public class Intersection
 
 	public Road[] getConnectedRoads ()
 	{
-		return this.connectedRoads.ToArray () as Road[];
+		Road[] rds = (Road[])this.connectedRoads.ToArray (typeof(Road));
+		return rds;
+	}
+
+	public void connectToRoad (Road road)
+	{
+		if (this.connectedRoads.Contains (road)) {
+			Debug.LogWarning ("Repeated Road connection to intersection");
+		}
+		this.connectedRoads.Add (road);
+		this.gameObject = this.builder.UpdateIntersection (this, this.gameObject);
 	}
 }
 
