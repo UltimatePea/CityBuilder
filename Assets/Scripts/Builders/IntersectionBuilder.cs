@@ -34,8 +34,10 @@ public class IntersectionBuilder : MonoBehaviour
 		} else 
 
 		// this is one way intersection
-			if (roads.Length == 1 /* temp */ || roads.Length == 2 /* temp */) {
+			if (roads.Length == 1) {
 			return buildOneWayIntersection (intersection, roads [0]);
+		} else if (roads.Length == 2) {
+			return buildTwoWayIntersection (intersection, roads [0], roads [1]);
 		} else {
 			return buildMultiwayIntersection (intersection, roads);
 		}
@@ -146,19 +148,172 @@ public class IntersectionBuilder : MonoBehaviour
 		}
 
 
-		// move up a little bit
-		position = position + new Vector3 (0, 0.01f, 0);
 
-		GameObject intersectionObj = Instantiate (oneWayIntersectionPrefab, position, orientation);
-		MeshFilter objMeshFilter = intersectionObj.GetComponent<MeshFilter> ();
-		objMeshFilter.mesh = mesh;
-
-		MeshCollider objMeshCollider = intersectionObj.GetComponent<MeshCollider> ();
-		objMeshCollider.sharedMesh = mesh;
+		GameObject intersectionObj = createGameObjectWithPrefabPositionAndMesh (oneWayIntersectionPrefab, position, mesh);
+		intersectionObj.transform.rotation = orientation;
 
 		return intersectionObj;
 	}
 
+	private GameObject buildTwoWayIntersection (Intersection intersection, Road road1, Road road2)
+	{
+		float roadWidth = 1f;
+		Vector3 vec1 = getOutgoingVector (intersection, road1).normalized;
+		Vector3 vec2 = getOutgoingVector (intersection, road2).normalized;
+		Vector3 vec1Norm = Quaternion.Euler (new Vector3 (0, 90, 0)) * vec1 * roadWidth / 2;
+		Vector3 vec2Norm = Quaternion.Euler (new Vector3 (0, -90, 0)) * vec2 * roadWidth / 2;
+		// check the intersection, if there's its inner, if there isn't, its outer
+		Vector3 refPoint;
+		GameObject inner;
+		GameObject outer;
+		if (Math3d.LineLineIntersection (out refPoint, vec1Norm, vec1 * 100, vec2Norm, vec2 * 100)) {
+			// we intersected, its inner
+			inner = buildInner (vec1Norm, vec2Norm, refPoint, intersection.position);
+			outer = buildOuter (-vec1Norm, -vec2Norm, 4, intersection.position);
+		} else {
+			// we are outer 
+			outer = buildOuter (vec1Norm, vec2Norm, 4, intersection.position);
+			// get the real intersection
+			// we need to * a const since the Math scirpt only considers line to be that long
+			if (Math3d.LineLineIntersection (out refPoint, -vec1Norm, vec1 * 100, -vec2Norm, vec2 * 100) == false) {
+				Debug.LogError ("Error creating intersection, Lines do not intersect");
+				// BUG: TODO: FIXIT
+				// BEHAVIOR: two lines intersect on the upper right corner, with less than 45 deg angle between them
+				/**	               
+				 *                 vvvvv Error Here
+				 * ------------------
+				 *                +
+				 *             +
+				 *         +
+				 *      +
+				 *   +
+				 * 
+				 */
+			}
+			inner = buildInner (-vec1Norm, -vec2Norm, refPoint, intersection.position);
+
+		}
+		// add rigidbody to enable selection
+		GameObject obj = new GameObject ("Two way intersection", typeof(Rigidbody));
+		obj.tag = GlobalTags.Intersection;
+		outer.transform.parent = obj.transform;
+		outer.tag = "Untagged";
+		inner.transform.parent = obj.transform;
+		inner.tag = "Untagged";
+		obj.GetComponent<Rigidbody> ().isKinematic = true;
+		return obj;
+	}
+
+	// this builds a quadrilateral shaped mesh, with four points
+	/**
+	 *     r
+	 * 
+	 * 
+	 * 
+	 * f       t
+	 * 
+	 *     z
+	 * 
+	 * r -- refpoint
+	 * f -- frompoint
+	 * t -- topoint
+	 * z -- Vector3.zero
+	 */
+	private GameObject buildInner (Vector3 fromPoint, Vector3 toPoint, Vector3 refPoint, Vector3 position)
+	{
+		Mesh mesh = new Mesh ();
+		Vector3[] vertices = {
+			refPoint, 
+			fromPoint,
+			toPoint, 
+			Vector3.zero
+		};
+		int[] triangles = {
+			0, 2, 3,
+			3, 1, 0
+		};
+		Vector3[] normals = {
+			Vector3.up,
+			Vector3.up,
+			Vector3.up,
+			Vector3.up
+		};
+		mesh.vertices = vertices;
+		mesh.triangles = triangles;
+		mesh.normals = normals;
+		return createGameObjectWithPrefabPositionAndMesh (oneWayIntersectionPrefab, position, mesh);
+		
+	}
+
+	// smoothness : number of triangles to create
+	private GameObject buildOuter (Vector3 fromPoint, Vector3 toPoint, int smoothness, Vector3 position)
+	{
+		// swap from to ponit if necessary
+		if (Vector3.Cross (fromPoint, toPoint).y < 0) {
+			Vector3 temp = fromPoint;
+			fromPoint = toPoint;
+			toPoint = temp;
+		}
+
+		// Outer is mimicking to one way road end, 
+		// TODO delete one way road end, use this method
+
+		// DEBUG HINT: 
+		/**
+		 *  e.g. s = 3
+		 * 
+		 * 0  2   4
+		 * |  /  +
+		 * | / +
+		 * |/+------ 6
+		 * 1 3 5
+		 * 
+		 * Triangles : 0 2 1, 2 4 3, 4 6 5
+         * 
+         * 
+         * UV:
+         * 0 2 4 6
+		 * 
+		 *  1 3 5
+		 * 
+		 * 
+		 */
+
+		Mesh mesh = new Mesh ();
+
+		Vector3[] vertices = new Vector3[2 * smoothness + 1];
+		Vector2[] uv = new Vector2[vertices.Length];
+		Vector3[] normals = new Vector3[vertices.Length];
+		for (int i = 0; i < smoothness + 1; i++) {
+			vertices [2 * i] = Vector3.Slerp (fromPoint, toPoint, (float)i / smoothness);
+			uv [2 * i] = Vector2.Lerp (new Vector2 (0, 0), new Vector2 (1, 0), (float)i / smoothness);
+			normals [2 * i] = Vector3.up;
+			if (i != smoothness) {
+				vertices [2 * i + 1] = Vector3.zero;
+				uv [2 * i + 1] = Vector2.Lerp (new Vector2 (0, 1), new Vector2 (1, 1), (float)i / smoothness)
+				+ new Vector2 (1f, 0) / smoothness / 2;
+				normals [2 * i + 1] = Vector3.up;
+			}
+		}
+		mesh.vertices = vertices;
+		mesh.uv = uv;
+		mesh.normals = normals;
+
+		int[] triangles = new int[smoothness * 3];
+		for (int i = 0; i < smoothness; i++) {
+			triangles [3 * i] = 2 * i;
+			triangles [3 * i + 1] = 2 * i + 2;
+			triangles [3 * i + 2] = 2 * i + 1;
+		}
+		mesh.triangles = triangles;
+
+
+
+		GameObject sectorRoad = createGameObjectWithPrefabPositionAndMesh (oneWayIntersectionPrefab, position, mesh);
+		// the outer is lower than normal intersection, same as roads
+		sectorRoad.transform.Translate (new Vector3 (0, -0.01f, 0));
+		return sectorRoad;
+	}
 
 	private GameObject buildMultiwayIntersection (Intersection intersection, Road[] connectedRoads)
 	{
@@ -226,17 +381,25 @@ public class IntersectionBuilder : MonoBehaviour
 		mesh.normals = normals;
 
 
+
+		var intersectionObj = createGameObjectWithPrefabPositionAndMesh (fourWayIntersectionPrefab, intersection.position, mesh);
+
+
+		return intersectionObj;
+	}
+
+	// this method will elevate intersection
+	private GameObject createGameObjectWithPrefabPositionAndMesh (GameObject prefab, Vector3 position, Mesh mesh)
+	{
 		// move up a little bit
 		// TODO Fix magic numbers
-		Vector3 position = intersection.position + new Vector3 (0, 0.02f, 0);
+		Vector3 elevatedPos = position + new Vector3 (0, 0.02f, 0);
 
-		GameObject intersectionObj = Instantiate (fourWayIntersectionPrefab, position, Quaternion.identity);
+		GameObject intersectionObj = Instantiate (prefab, elevatedPos, Quaternion.identity);
 		MeshFilter objMeshFilter = intersectionObj.GetComponent<MeshFilter> ();
 		objMeshFilter.mesh = mesh;
-
 		MeshCollider objMeshCollider = intersectionObj.GetComponent<MeshCollider> ();
 		objMeshCollider.sharedMesh = mesh;
-
 		return intersectionObj;
 	}
 
@@ -273,3 +436,4 @@ public class IntersectionBuilder : MonoBehaviour
 		
 	}
 }
+

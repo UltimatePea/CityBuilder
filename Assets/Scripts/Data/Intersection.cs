@@ -30,7 +30,7 @@ public class Intersection
 		this.connectedRoads = new List<Road> ();
 		_position = position;
 
-		this.builder = GameObject.FindWithTag ("Builder").GetComponent<IntersectionBuilder> ();
+		this.builder = GameObject.FindWithTag (GlobalTags.Builder).GetComponent<IntersectionBuilder> ();
 		// TODO Performance optimizaiton: this always build an empty game object
 		this.gameObject = this.builder.BuildIntersection (this);
 

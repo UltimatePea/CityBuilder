@@ -19,10 +19,12 @@ public class RoadConstructionController : MonoBehaviour
 			Debug.Log (obj.tag);
 			// record start position on mouse press
 
-			if (obj.tag == "Ground") {
+			if (obj.tag == GlobalTags.Ground) {
 				this.startIntersection = new Intersection (position);
-			} else if (obj.tag == "Intersection") {
+			} else if (obj.tag == GlobalTags.Intersection) {
 				this.startIntersection = Intersection.IntersectionForGameObject (obj);
+			} else {
+				Debug.LogWarningFormat ("Unexpected ray hit on {0} with tag {1}", obj, obj.tag);
 			}
 
 		} else if (Input.GetMouseButton (0) || Input.GetMouseButtonUp (0)) {
@@ -41,7 +43,7 @@ public class RoadConstructionController : MonoBehaviour
 //						this.startIntersection.connectToIntersection (this.endIntersection);
 //					}
 //				}
-//			} else if (obj.tag == "Intersection") {
+//			} else if (obj.tag == GlobalTags.Intersection) {
 //				if (this.endIntersection == null) {
 //					this.endIntersection = Intersection.IntersectionForGameObject (obj);
 //					this.startIntersection.connectToIntersection (this.endIntersection);
@@ -61,11 +63,12 @@ public class RoadConstructionController : MonoBehaviour
 		// temp road becomes permanent when the user releases the mouse
 		if (Input.GetMouseButtonUp (0)) {
 			Debug.Log (obj.tag);
-			if (obj.tag == "Ground") {
+			if (obj.tag == GlobalTags.Ground) {
 				this.endIntersection = new Intersection (position);
-			} else if (obj.tag == "Intersection") {
+			} else if (obj.tag == GlobalTags.Intersection) {
 				this.endIntersection = Intersection.IntersectionForGameObject (obj);
 			}
+			Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, this.endIntersection);
 			this.startIntersection.connectToIntersection (this.endIntersection);
 			this.startIntersection = null;
 			this.endIntersection = null;
@@ -83,7 +86,7 @@ public class RoadConstructionController : MonoBehaviour
 		RaycastHit hitInfo = new RaycastHit ();
 		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
 			Vector3 point = hitInfo.point;
-			tag = hitInfo.collider.gameObject;
+			tag = hitInfo.transform.gameObject;
 			return point;
 		}
 		tag = null;

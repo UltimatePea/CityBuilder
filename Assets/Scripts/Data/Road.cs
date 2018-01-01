@@ -20,7 +20,7 @@ public class Road
 		fromIntersection.connectToRoad (this);
 		toIntersection.connectToRoad (this);
 
-		this.builder = GameObject.FindWithTag ("Builder").GetComponent<RoadBuilder> ();
+		this.builder = GameObject.FindWithTag (GlobalTags.Builder).GetComponent<RoadBuilder> ();
 		this.gameObject = this.builder.BuildRoad (this);
 
 
