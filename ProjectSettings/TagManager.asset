@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Builder
   - Controller
+  - Intersection
+  - Ground
   layers:
   - Default
   - TransparentFX
