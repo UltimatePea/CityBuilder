@@ -221,6 +221,13 @@ public class IntersectionBuilder : MonoBehaviour
 	 */
 	private GameObject buildInner (Vector3 fromPoint, Vector3 toPoint, Vector3 refPoint, Vector3 position)
 	{
+		// swap from to ponit if necessary
+		if (Vector3.Cross (fromPoint, toPoint).y < 0) {
+			Vector3 temp = fromPoint;
+			fromPoint = toPoint;
+			toPoint = temp;
+		}
+
 		Mesh mesh = new Mesh ();
 		Vector3[] vertices = {
 			refPoint, 
