@@ -157,9 +157,17 @@ public class IntersectionBuilder : MonoBehaviour
 
 	private GameObject buildTwoWayIntersection (Intersection intersection, Road road1, Road road2)
 	{
-		float roadWidth = 1f;
+		
 		Vector3 vec1 = getOutgoingVector (intersection, road1).normalized;
 		Vector3 vec2 = getOutgoingVector (intersection, road2).normalized;
+		if (Vector3.Angle (vec1, vec2) < 90) {
+			Vector3[] vecs = { vec1, vec2, -vec1, -vec2 };
+			return buildMultiwayIntersectionWithVectors (intersection, vecs);
+		}
+
+		// only when angle > 90
+
+		float roadWidth = 1f;
 		Vector3 vec1Norm = Quaternion.Euler (new Vector3 (0, 90, 0)) * vec1 * roadWidth / 2;
 		Vector3 vec2Norm = Quaternion.Euler (new Vector3 (0, -90, 0)) * vec2 * roadWidth / 2;
 		// check the intersection, if there's its inner, if there isn't, its outer
@@ -324,20 +332,55 @@ public class IntersectionBuilder : MonoBehaviour
 
 	private GameObject buildMultiwayIntersection (Intersection intersection, Road[] connectedRoads)
 	{
-		// get an angle of all roads
-		Road[] sorted = connectedRoads.OrderBy (rd => getAngle (intersection, rd).eulerAngles.y).ToArray ();
+		// convert roads to vectos
+		Vector3[] vectors = connectedRoads.Select (rd => getOutgoingVector (intersection, rd)).ToArray ();
 
+
+		// handle when connectedRoads.Length == 3  << build a four-way intersection instead
+		if (connectedRoads.Length == 3) {
+			// find the vector whose direction is of greatest difference to other two
+
+			Vector3 maxVector = vectors [0];
+			float maxAngles = 0; 
+			for (int i = 0; i < 3; i++) {
+				float accum = 0;
+				for (int j = 0; j < 3; j++) {
+					float zeroTo180Angle = Vector3.Angle (vectors [i], vectors [j]);
+					float distance = zeroTo180Angle > 90 ? 180 - zeroTo180Angle : zeroTo180Angle;
+					accum += distance;
+				}
+				if (accum > maxAngles) {
+					maxVector = vectors [i];
+					maxAngles = accum;
+				}
+				
+			}
+
+			Vector3[] resultingVectors = { vectors [0], vectors [1], vectors [2], -maxVector };
+
+			return buildMultiwayIntersectionWithVectors (intersection, resultingVectors);
+			
+		}
+
+		return buildMultiwayIntersectionWithVectors (intersection, vectors);
+	}
+
+
+	private GameObject buildMultiwayIntersectionWithVectors (Intersection intersection, Vector3[] outgointVectors)
+	{
+		// sort vectors according to orientations first
+		Vector3[] sorted = outgointVectors.OrderBy (vec => Quaternion.FromToRotation (Vector3.right, vec).eulerAngles.y).ToArray ();
 		Mesh mesh = new Mesh ();
 
 		// get a list of intersection vertices
 		Vector3[] vertices = new Vector3[sorted.Length + 2];
 		float roadWidth = 1f;
 		for (int i = 0; i < sorted.Length; i++) {
-			Road rd1 = sorted [i];
-			Road rd2 = sorted [(i + 1) % sorted.Length];
+			Vector3 rd1 = sorted [i];
+			Vector3 rd2 = sorted [(i + 1) % sorted.Length];
 			// get intersection of rd1's right edge with rd2's left edge
-			Vector3 vec1 = getOutgoingVector (intersection, rd1).normalized;
-			Vector3 vec2 = getOutgoingVector (intersection, rd2).normalized;
+			Vector3 vec1 = rd1.normalized;
+			Vector3 vec2 = rd2.normalized;
 			Vector3 vec1Norm = Quaternion.Euler (new Vector3 (0, 90, 0)) * vec1 * roadWidth / 2;
 			Vector3 vec2Norm = Quaternion.Euler (new Vector3 (0, -90, 0)) * vec2 * roadWidth / 2;
 
@@ -352,7 +395,7 @@ public class IntersectionBuilder : MonoBehaviour
 		Debug.LogFormat ("Vertex ({0}) : {1}", sorted.Length, vertices [sorted.Length]);
 		mesh.vertices = vertices;
 
-		int[] triangles = new int[connectedRoads.Length * 3];
+		int[] triangles = new int[outgointVectors.Length * 3];
 		// TODO : Figure out how sortBy works, thus affecting the orientation of the plane
 		for (int i = 0; i < sorted.Length; i++) {
 			triangles [i * 3 + 2] = i;
@@ -393,7 +436,9 @@ public class IntersectionBuilder : MonoBehaviour
 
 
 		return intersectionObj;
+
 	}
+
 
 	// this method will elevate intersection
 	private GameObject createGameObjectWithPrefabPositionAndMesh (GameObject prefab, Vector3 position, Mesh mesh)

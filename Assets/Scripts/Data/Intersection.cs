@@ -72,8 +72,15 @@ public class Intersection
 		this.connectedRoads.Remove (road);
 	}
 
+	// this method does nothing if argument is the same as receiver
 	public void connectToIntersection (Intersection intersection)
 	{
+		// make sure that the intersection to connect is not itself
+		if (this == intersection) {
+			return;
+		}
+
+		// TODO : Fix this design
 		new Road (this, intersection);
 	}
 
