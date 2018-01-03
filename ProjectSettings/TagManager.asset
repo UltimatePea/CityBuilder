@@ -8,6 +8,7 @@ TagManager:
   - Controller
   - Intersection
   - Ground
+  - Manager
   layers:
   - Default
   - TransparentFX

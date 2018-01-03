@@ -9,6 +9,8 @@ public class Intersection
 	private List<Road> connectedRoads;
 	private Vector3 _position;
 
+	public IntersectionCustomization customization;
+
 	public Vector3 position {
 		get { return _position; }
 		set {
@@ -25,8 +27,9 @@ public class Intersection
 	// reference to the global builder
 	private IntersectionBuilder builder;
 
-	public Intersection (Vector3 position)
+	public Intersection (Vector3 position, IntersectionCustomization customization)
 	{
+		this.customization = customization;
 		this.connectedRoads = new List<Road> ();
 		_position = position;
 
@@ -70,18 +73,27 @@ public class Intersection
 			Debug.LogWarning ("Attemp to delete non-existent road");
 		}
 		this.connectedRoads.Remove (road);
+		UpdateGameObject (); // we definitely changed appearance upon road deletion
+	}
+
+	/** This only checks for One Step **/
+	public bool IsDirectlyConnectedTo (Intersection intersection)
+	{
+		foreach (Road rd in this.connectedRoads) {
+			// return true if any road's other end
+			if (rd.otherIntersection (this) == intersection) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	// this method does nothing if argument is the same as receiver
-	public void connectToIntersection (Intersection intersection)
+	public Road connectToIntersection (Intersection intersection)
 	{
-		// make sure that the intersection to connect is not itself
-		if (this == intersection) {
-			return;
-		}
 
 		// TODO : Fix this design
-		new Road (this, intersection);
+		return new Road (this, intersection);
 	}
 
 	public void DeleteIntersection ()

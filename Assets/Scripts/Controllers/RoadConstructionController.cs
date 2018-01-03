@@ -6,9 +6,11 @@ using UnityEngine;
 public class RoadConstructionController : MonoBehaviour
 {
 
+	public IntersectionManager intersecManager;
 
 	private Intersection startIntersection;
-	private Intersection endIntersection;
+
+
 
 	void Update ()
 	{
@@ -20,9 +22,9 @@ public class RoadConstructionController : MonoBehaviour
 			// record start position on mouse press
 
 			if (obj.tag == GlobalTags.Ground) {
-				this.startIntersection = new Intersection (position);
+				this.startIntersection = intersecManager.createIntersection (position);
 			} else if (obj.tag == GlobalTags.Intersection) {
-				this.startIntersection = Intersection.IntersectionForGameObject (obj);
+				this.startIntersection = intersecManager.intersectionForGameObject (obj);
 			} else {
 				Debug.LogWarningFormat ("Unexpected ray hit on {0} with tag {1}", obj, obj.tag);
 			}
@@ -30,48 +32,64 @@ public class RoadConstructionController : MonoBehaviour
 		} else if (Input.GetMouseButton (0) || Input.GetMouseButtonUp (0)) {
 
 //			// create and destroy tempRoad on mouse drag and mouse release
-//			if (obj.tag == "Plane") {
-//				if (this.endIntersection == null) {
-//					this.endIntersection = new Intersection (position);
-//					this.startIntersection.connectToIntersection (this.endIntersection);
-//				} else {
-//					if (this.endIntersection.getConnectedRoads ().Length == 1) {
-//						this.endIntersection.position = position;
-//					} else {
-//						this.startIntersection.RemoveConnectionTo (this.endIntersection);
-//						this.endIntersection = new Intersection (position);
-//						this.startIntersection.connectToIntersection (this.endIntersection);
-//					}
-//				}
-//			} else if (obj.tag == GlobalTags.Intersection) {
-//				if (this.endIntersection == null) {
-//					this.endIntersection = Intersection.IntersectionForGameObject (obj);
-//					this.startIntersection.connectToIntersection (this.endIntersection);
-//				} else {
-//					if (this.endIntersection.getConnectedRoads ().Length == 1) {
-//						// we raycasted onto our own road
-//						if(this.endIntersection.getConnectedRoads()[0].otherIntersection(this.endIntersection) == this.startIntersection){
-//							this.endIntersection
-//							
-//						}
-//						
-//					}
-//				}
-//			}
+			if (obj.tag == GlobalTags.Ground) {
+				if (!intersecManager.temporaryIntersectionExists ()) {
+					// no temporary intersection exists
+					intersecManager.removeTemporaryRoadIfThereIsAny ();
+					// create temporary if there is not any
+					Intersection temporary = intersecManager.createTemporaryIntersection (position);
+					// if the intersection is temporary, road could be non-temporary
+					this.intersecManager.connectTwoIntersections (temporary, this.startIntersection);
+				} else {
+					// some temporary intersection exists
+					// otherwise move the current temporary intersection to the new mouse position
+					this.intersecManager.updateTemporaryIntersectionPosition (position);
+				}
+			} else if (obj.tag == GlobalTags.Intersection) {
+				// We've moused on an intersection
+				Intersection intersectionOnHit = intersecManager.intersectionForGameObject (obj);
+
+				// check if there's a temporary intersection
+				if (!intersecManager.temporaryIntersectionExists ()) {
+					// there's no temporary intersection, and we've clicked on an existing intersection
+					if (this.intersecManager.canConnectTwoIntersections (intersectionOnHit, this.startIntersection)) {
+						this.intersecManager.createTemporaryConnection (intersectionOnHit, 
+							this.startIntersection);
+					} else {
+						// TODO: Get failure reason
+					}
+				} else {
+					// there is a temporary intersection, check to see if the we've hit a temporary intersection
+					// TODO: We should not hit a temporary intersection with Raycast
+					if (intersecManager.isTemporaryIntersectionPresent (intersectionOnHit)) {
+						// otherwise move the current temporary intersection to the new mouse position
+						this.intersecManager.updateTemporaryIntersectionPosition (position);
+						Debug.Assert (false);// we should not hit a temporary intersection with Raycast
+					} else {
+						// we've on a intersection, and the intersection is not the temporary intersection
+						// we remove all temporary intersection
+						this.intersecManager.removeTemporaryIntersectionIfThereIsAny ();
+						// and we create the temporary connection
+						this.intersecManager.createTemporaryConnection (this.startIntersection, intersectionOnHit);
+					}
+				}
+			}
 		}
 
 		// temp road becomes permanent when the user releases the mouse
 		if (Input.GetMouseButtonUp (0)) {
 			Debug.Log (obj.tag);
+			intersecManager.removeTemporaryRoadIfThereIsAny ();
+			intersecManager.removeTemporaryIntersectionIfThereIsAny ();
+			Intersection endIntersection = null;
 			if (obj.tag == GlobalTags.Ground) {
-				this.endIntersection = new Intersection (position);
+				endIntersection = intersecManager.createIntersection (position);
 			} else if (obj.tag == GlobalTags.Intersection) {
-				this.endIntersection = Intersection.IntersectionForGameObject (obj);
+				endIntersection = intersecManager.intersectionForGameObject (obj);
 			}
-			Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, this.endIntersection);
-			this.startIntersection.connectToIntersection (this.endIntersection);
+			Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, endIntersection);
+			this.intersecManager.connectTwoIntersections (this.startIntersection, endIntersection);
 			this.startIntersection = null;
-			this.endIntersection = null;
 		}
 
 
@@ -84,7 +102,7 @@ public class RoadConstructionController : MonoBehaviour
 		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
 
 		RaycastHit hitInfo = new RaycastHit ();
-		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity)) {
+		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity, ~(1 << GlobalLayers.IgnoreRaycast))) {
 			Vector3 point = hitInfo.point;
 			tag = hitInfo.transform.gameObject;
 			return point;
