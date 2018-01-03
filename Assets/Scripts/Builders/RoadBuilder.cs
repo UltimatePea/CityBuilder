@@ -19,12 +19,12 @@ public class RoadBuilder : MonoBehaviour
 
 		Mesh mesh = new Mesh ();
 
-		float width = 1f;
+		float width = road.GetRoadWidth ();
 		Vector3[] verticies = {
-			new Vector3 (0, 0, 0 - width / 2),
-			new Vector3 (roadLength, 0, 0 - width / 2),
-			new Vector3 (roadLength, 0, 1 - width / 2),
-			new Vector3 (0, 0, 1 - width / 2)
+			new Vector3 (0, 0, -width / 2),
+			new Vector3 (roadLength, 0, -width / 2),
+			new Vector3 (roadLength, 0, width / 2),
+			new Vector3 (0, 0, width / 2)
 		};
 
 		mesh.vertices = verticies;

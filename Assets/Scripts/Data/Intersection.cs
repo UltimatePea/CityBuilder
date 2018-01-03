@@ -88,11 +88,11 @@ public class Intersection
 	}
 
 	// this method does nothing if argument is the same as receiver
-	public Road connectToIntersection (Intersection intersection)
+	public Road connectToIntersection (Intersection intersection, RoadConfiguration config)
 	{
 
 		// TODO : Fix this design
-		return new Road (this, intersection);
+		return new Road (this, intersection, config);
 	}
 
 	public void DeleteIntersection ()

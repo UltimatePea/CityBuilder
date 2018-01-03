@@ -12,10 +12,18 @@ public class Road
 	private RoadBuilder builder;
 	private GameObject gameObject;
 
-	public Road (Intersection fromIntersection, Intersection toIntersection)
+	private float roadWidth;
+
+	public float GetRoadWidth ()
+	{
+		return roadWidth;
+	}
+
+	public Road (Intersection fromIntersection, Intersection toIntersection, RoadConfiguration config)
 	{
 		this.fromIntersection = fromIntersection;
 		this.toIntersection = toIntersection;
+		this.roadWidth = config.roadWidth;
 
 		fromIntersection.connectToRoad (this);
 		toIntersection.connectToRoad (this);

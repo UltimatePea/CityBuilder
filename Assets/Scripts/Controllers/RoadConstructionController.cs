@@ -7,13 +7,23 @@ public class RoadConstructionController : MonoBehaviour
 {
 
 	public IntersectionManager intersecManager;
+	public float roadWidth;
 
 	private Intersection startIntersection;
 
 
+	void SetRoadWidth(){
+		if(Input.GetKeyDown(KeyCode.Alpha1)){ roadWidth = 1; } else 
+		if(Input.GetKeyDown(KeyCode.Alpha2)){ roadWidth = 2; } else 
+		if(Input.GetKeyDown(KeyCode.Alpha3)){ roadWidth = 3; } else 
+		if(Input.GetKeyDown(KeyCode.Alpha4)){ roadWidth = 4; } else 
+		if(Input.GetKeyDown(KeyCode.Alpha5)){ roadWidth = 5; }
+		
+	}
 
 	void Update ()
 	{
+		SetRoadWidth();
 		GameObject obj;
 		Vector3 position = getMousePositionOnPlane (out obj);
 		if (Input.GetMouseButtonDown (0)) {
@@ -39,7 +49,14 @@ public class RoadConstructionController : MonoBehaviour
 					// create temporary if there is not any
 					Intersection temporary = intersecManager.createTemporaryIntersection (position);
 					// if the intersection is temporary, road could be non-temporary
-					this.intersecManager.connectTwoIntersections (temporary, this.startIntersection);
+					if (this.intersecManager.canConnectTwoIntersections (temporary, this.startIntersection, roadWidth)) {
+						// conditional check to prevent road length to be zero( thus a physics error)
+						// would not be a problem if we switched to sphere
+						this.intersecManager.connectTwoIntersections (temporary, this.startIntersection, roadWidth);
+					} else {
+						// we could not create connection here, remove the temporary
+						this.intersecManager.removeTemporaryIntersectionIfThereIsAny ();
+					}
 				} else {
 					// some temporary intersection exists
 					// otherwise move the current temporary intersection to the new mouse position
@@ -52,9 +69,9 @@ public class RoadConstructionController : MonoBehaviour
 				// check if there's a temporary intersection
 				if (!intersecManager.temporaryIntersectionExists ()) {
 					// there's no temporary intersection, and we've clicked on an existing intersection
-					if (this.intersecManager.canConnectTwoIntersections (intersectionOnHit, this.startIntersection)) {
+					if (this.intersecManager.canConnectTwoIntersections (intersectionOnHit, this.startIntersection, roadWidth)) {
 						this.intersecManager.createTemporaryConnection (intersectionOnHit, 
-							this.startIntersection);
+							this.startIntersection, roadWidth);
 					} else {
 						// TODO: Get failure reason
 					}
@@ -70,7 +87,7 @@ public class RoadConstructionController : MonoBehaviour
 						// we remove all temporary intersection
 						this.intersecManager.removeTemporaryIntersectionIfThereIsAny ();
 						// and we create the temporary connection
-						this.intersecManager.createTemporaryConnection (this.startIntersection, intersectionOnHit);
+						this.intersecManager.createTemporaryConnection (this.startIntersection, intersectionOnHit, roadWidth);
 					}
 				}
 			}
@@ -88,7 +105,7 @@ public class RoadConstructionController : MonoBehaviour
 			Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, endIntersection);
 			intersecManager.removeTemporaryRoadIfThereIsAny ();
 			intersecManager.removeTemporaryIntersectionIfThereIsAny ();
-			this.intersecManager.connectTwoIntersections (this.startIntersection, endIntersection);
+			this.intersecManager.connectTwoIntersections (this.startIntersection, endIntersection, roadWidth);
 			this.startIntersection = null;
 		}
 

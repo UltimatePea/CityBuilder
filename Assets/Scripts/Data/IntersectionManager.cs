@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 
+
 public class IntersectionManager : MonoBehaviour
 {
 
@@ -32,9 +33,9 @@ public class IntersectionManager : MonoBehaviour
 		temporaryIntersections.ForEach (inter => inter.position = position);
 	}
 
-	public void createTemporaryConnection (Intersection intersection1, Intersection intersection2)
+	public void createTemporaryConnection (Intersection intersection1, Intersection intersection2, float roadWidth)
 	{
-		Road rd = connectTwoIntersections (intersection1, intersection2);
+		Road rd = connectTwoIntersections (intersection1, intersection2, roadWidth);
 		tempRoad = rd;
 	}
 
@@ -61,21 +62,26 @@ public class IntersectionManager : MonoBehaviour
 		return intersec;
 	}
 
-	public bool canConnectTwoIntersections (Intersection fromIntersection, Intersection toIntersection)
+	public bool canConnectTwoIntersections (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
 		// TODO : Add failure reason
 		if (fromIntersection == toIntersection) {
+			// no self loop
 			return false;
 		} else if (fromIntersection.IsDirectlyConnectedTo (toIntersection)) {
+			// connection already exits
+			return false;
+		} else if (fromIntersection.position == toIntersection.position) {
+			// no overlapping interesections
 			return false;
 		}
 		return true;
 	}
 
-	public Road connectTwoIntersections (Intersection fromIntersection, Intersection toIntersection)
+	public Road connectTwoIntersections (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
-		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection));
-		return fromIntersection.connectToIntersection (toIntersection);
+		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection, roadWidth));
+		return fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
 	}
 
 	/* Mapping */
