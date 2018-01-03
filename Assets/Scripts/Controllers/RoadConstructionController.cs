@@ -29,7 +29,7 @@ public class RoadConstructionController : MonoBehaviour
 				Debug.LogWarningFormat ("Unexpected ray hit on {0} with tag {1}", obj, obj.tag);
 			}
 
-		} else if (Input.GetMouseButton (0) || Input.GetMouseButtonUp (0)) {
+		} else if (Input.GetMouseButton (0)) {
 
 //			// create and destroy tempRoad on mouse drag and mouse release
 			if (obj.tag == GlobalTags.Ground) {
@@ -79,8 +79,6 @@ public class RoadConstructionController : MonoBehaviour
 		// temp road becomes permanent when the user releases the mouse
 		if (Input.GetMouseButtonUp (0)) {
 			Debug.Log (obj.tag);
-			intersecManager.removeTemporaryRoadIfThereIsAny ();
-			intersecManager.removeTemporaryIntersectionIfThereIsAny ();
 			Intersection endIntersection = null;
 			if (obj.tag == GlobalTags.Ground) {
 				endIntersection = intersecManager.createIntersection (position);
@@ -88,6 +86,8 @@ public class RoadConstructionController : MonoBehaviour
 				endIntersection = intersecManager.intersectionForGameObject (obj);
 			}
 			Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, endIntersection);
+			intersecManager.removeTemporaryRoadIfThereIsAny ();
+			intersecManager.removeTemporaryIntersectionIfThereIsAny ();
 			this.intersecManager.connectTwoIntersections (this.startIntersection, endIntersection);
 			this.startIntersection = null;
 		}

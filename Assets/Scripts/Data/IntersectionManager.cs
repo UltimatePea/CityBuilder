@@ -9,6 +9,7 @@ public class IntersectionManager : MonoBehaviour
 	private List<Intersection> temporaryIntersections = new List<Intersection> ();
 	private Road tempRoad;
 
+	// temporary intersection cannot be retrieved via game object
 	public Intersection createTemporaryIntersection (Vector3 position)
 	{
 		Intersection temp = new  Intersection (position, new IntersectionCustomization (true));
@@ -47,6 +48,7 @@ public class IntersectionManager : MonoBehaviour
 
 	public void removeTemporaryIntersectionIfThereIsAny ()
 	{
+		// since temporary does not count towards all intersections
 		temporaryIntersections.ForEach (i => i.DeleteIntersection ());
 		temporaryIntersections.Clear ();
 	}
@@ -54,7 +56,9 @@ public class IntersectionManager : MonoBehaviour
 
 	public Intersection createIntersection (Vector3 position)
 	{
-		return new Intersection (position, new IntersectionCustomization (false));
+		Intersection intersec = new Intersection (position, new IntersectionCustomization (false));
+		allInstances.Add (intersec);
+		return intersec;
 	}
 
 	public bool canConnectTwoIntersections (Intersection fromIntersection, Intersection toIntersection)
@@ -74,11 +78,21 @@ public class IntersectionManager : MonoBehaviour
 		return fromIntersection.connectToIntersection (toIntersection);
 	}
 
-	public Intersection intersectionForGameObject (GameObject obj)
+	/* Mapping */
+	private List<Intersection> allInstances = new List<Intersection> ();
+
+
+	public Intersection intersectionForGameObject (GameObject gameObject)
 	{
-		return Intersection.IntersectionForGameObject (obj);
+		foreach (Intersection inter in allInstances) {
+			if (inter.GetGameObject () == gameObject) {
+				return inter;
+			}
+		}
+		return null;
 	}
-	
+
+
 
 }
 

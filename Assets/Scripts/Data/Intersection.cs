@@ -37,7 +37,6 @@ public class Intersection
 		// TODO Performance optimizaiton: this always build an empty game object
 		this.gameObject = this.builder.BuildIntersection (this);
 
-		allInstances.Add (this);
 
 	}
 
@@ -100,8 +99,7 @@ public class Intersection
 	{
 		this.connectedRoads.ForEach (rd => rd.DeleteRoad ());
 		GameObject.Destroy (this.gameObject);
-		allInstances.Remove (this);
-		
+
 	}
 
 	public void RemoveConnectionTo (Intersection intersection)
@@ -122,21 +120,6 @@ public class Intersection
 		}
 	}
 
-	private static List<Intersection> allInstances;
 
-	static Intersection ()
-	{
-		allInstances = new List<Intersection> ();
-	}
-
-	public static Intersection IntersectionForGameObject (GameObject gameObject)
-	{
-		foreach (Intersection inter in allInstances) {
-			if (inter.gameObject == gameObject) {
-				return inter;
-			}
-		}
-		return null;
-	}
 
 }
