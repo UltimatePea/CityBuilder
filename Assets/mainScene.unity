@@ -471,6 +471,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   intersecManager: {fileID: 600529198}
+  roadWidth: 1
 --- !u!114 &2082548759
 MonoBehaviour:
   m_ObjectHideFlags: 0

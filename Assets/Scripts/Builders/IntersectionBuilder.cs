@@ -13,6 +13,26 @@ public class IntersectionBuilder : MonoBehaviour
 	// compensation for math3d line intersection algorithm
 	public GameObject fourWayIntersectionPrefab;
 	public GameObject oneWayIntersectionPrefab;
+	
+	enum IntersectionType { NONE, ONE_WAY, TWO_WAY, MULTI_WAY}
+
+	private IntersectionType GetIntersectionType(Intersection intersection)
+	{
+		Road[] roads = intersection.getConnectedRoads ();
+		if (roads.Length == 0)
+		{
+			return IntersectionType.NONE;
+		} else if (roads.Length == 1)
+		{
+			return IntersectionType.ONE_WAY;
+		} else if (roads.Length == 2)
+		{
+			return IntersectionType.TWO_WAY;
+		} else
+		{
+			return IntersectionType.MULTI_WAY;
+		}
+	}
 
 
 	// this method will not change intersectionObject and returns an updated game object
@@ -30,20 +50,17 @@ public class IntersectionBuilder : MonoBehaviour
 	{
 		Road[] roads = intersection.getConnectedRoads ();
 		// no intersection if no roads
-		if (roads.Length == 0) {
-//			return Instantiate (oneWayIntersectionPrefab, intersection.position, Quaternion.identity);
-			return new GameObject ("intersection");
-		} else 
-
-		// this is one way intersection
-			if (roads.Length == 1) {
-			return buildOneWayIntersection (intersection, roads [0]);
-		} else if (roads.Length == 2) {
-			return buildTwoWayIntersection (intersection, roads [0], roads [1]);
-		} else {
-			return buildMultiwayIntersection (intersection, roads);
+		switch (GetIntersectionType(intersection))
+		{
+			case IntersectionType.NONE:
+				return new GameObject ("intersection");
+			case IntersectionType.ONE_WAY:
+				return buildOneWayIntersection (intersection, roads [0]);
+			case IntersectionType.TWO_WAY:
+				return buildTwoWayIntersection (intersection, roads [0], roads [1]);
+			case IntersectionType.MULTI_WAY:
+				return buildMultiwayIntersection (intersection, roads);
 		}
-		
 	}
 
 	private GameObject buildOneWayIntersection (Intersection intersection, Road connectedRoad)
