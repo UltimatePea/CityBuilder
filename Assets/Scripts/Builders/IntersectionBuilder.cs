@@ -33,7 +33,124 @@ public class IntersectionBuilder : MonoBehaviour
 			return IntersectionType.MULTI_WAY;
 		}
 	}
+	
+	/************************
+	 * Coordinate Calculation
+	 **********************************/
 
+
+	
+	/**
+	 * Returns the coordinate for the left edge and right edge of the road.
+	 *
+	 *
+	 * The behavior is undefined when road is not attached to the intersection.
+	 * TODO: Throw an exception if this is the case (exp one way)
+	 *
+	 *
+	 * Right or left is regarding the direction going out from intersection
+	 * 
+	 *
+	 * rtlt: Right : the point on the right of the outgoing vector
+	 * 		 Left : the point on the left of the outgoing vector
+	 * 		Note: This direction is the reverse of what traditionally known as left or right
+	 * 
+	 */
+	public enum RightOrLeft { RIGHT, LEFT }
+	public Vector3 coordinateForRoadAtIntersection (Intersection intersection, Road road, RightOrLeft rtlt)
+	{
+		Road[] roads = intersection.getConnectedRoads ();
+		// no intersection if no roads
+		switch (GetIntersectionType(intersection))
+		{
+			case IntersectionType.NONE:
+				return Vector3.zero;
+			case IntersectionType.ONE_WAY:
+				return CoordinateForOneWayIntersection(intersection, road, rtlt);
+			case IntersectionType.TWO_WAY:
+				return CoordinateForTwoWayIntersection(intersection, road, rtlt);
+			case IntersectionType.MULTI_WAY:
+				return CoordinateForMultiwayIntersection(intersection, road, rtlt);
+		}
+
+		return Vector3.zero;
+	}
+
+	private Vector3 CoordinateForOneWayIntersection(Intersection intersection, Road connectedRoad , RightOrLeft rtlt)
+	{
+		Vector3 outVec = getOutgoingVectorForOneWayIntersection(intersection, connectedRoad);
+		Vector3 rightVec = Quaternion.Euler (0, 90, 0) * outVec;
+		Vector3 leftVec = Quaternion.Euler (0, -90, 0) * outVec;
+		switch (rtlt)
+		{
+				case RightOrLeft.LEFT:
+					return leftVec;
+				case RightOrLeft.RIGHT:
+					return rightVec;
+		}
+
+		return Vector3.zero;
+	}
+
+	private Vector3 CoordinateForTwoWayIntersection(Intersection intersection, Road connectedRoad, RightOrLeft rtlt)
+	{
+		switch (GetTwoWayIntersectionType(intersection, intersection.getConnectedRoads()[0], intersection.getConnectedRoads()[1]))
+		{
+		case TwoWayIntersectionType.SKEW:
+		case TwoWayIntersectionType.TRANSITION:
+			AbstractWayInfo[] infos = AbstractWayInfosForTwoWayIntersection(intersection, intersection.getConnectedRoads()[0],
+				intersection.getConnectedRoads()[1]);
+			return CoordinateForRoadWithAbstractRoadInfos(intersection, connectedRoad, rtlt, infos);
+		case TwoWayIntersectionType.SMOOTH:
+			// basically it is the same as one way
+
+			return CoordinateForOneWayIntersection(intersection, connectedRoad, rtlt);
+		}
+
+		return Vector3.zero;
+	}
+
+	private Vector3 CoordinateForMultiwayIntersection(Intersection intersection, Road connectedRoad, RightOrLeft rtlt)
+	{
+		AbstractWayInfo[] infos = AbstractWayInfosForMultiwayIntersection(intersection, intersection.getConnectedRoads());
+		return CoordinateForRoadWithAbstractRoadInfos(intersection, connectedRoad, rtlt, infos);
+	}
+
+	private Vector3 CoordinateForRoadWithAbstractRoadInfos(Intersection intersection, Road connectedRoad, RightOrLeft rtlt,
+		AbstractWayInfo[] infos)
+	{
+		infos = AbstractWayInfo.sortAbstractWayInfos(infos);
+
+		// convert the road to an abstract way info
+		AbstractWayInfo info = new AbstractWayInfo(getOutgoingVector(intersection, connectedRoad).normalized,
+			connectedRoad.GetRoadWidth());
+		// TODO : CHECK FOR nonexistent index
+		int index = 0;
+		for (int i = 0; i < infos.Length; i++)
+		{
+			if (infos[i] == info)
+			{
+				index = i;
+			}
+		}
+
+		Vector3[] vertices = MeshVerticesForAbstractWayInfos(infos);
+
+		switch (rtlt)
+		{
+			case RightOrLeft.LEFT:
+				return vertices[index - 1 < 0 ? infos.Length : index - 1];
+			case RightOrLeft.RIGHT:
+				return vertices[index];
+		}
+
+		return Vector3.zero;
+	}
+
+
+	/**********************************************
+	 * Intersection Building
+	 ************************************************/
 
 	// this method will not change intersectionObject and returns an updated game object
 	// intersectionObject must be the one returned by a previous call to BuildIntersection
@@ -43,7 +160,6 @@ public class IntersectionBuilder : MonoBehaviour
 		GameObject newIntersection = BuildIntersection (intersection);
 		return newIntersection;
 	}
-
 
 	// build a single intersection, returns the created game object
 	public GameObject BuildIntersection (Intersection intersection)
@@ -61,20 +177,32 @@ public class IntersectionBuilder : MonoBehaviour
 			case IntersectionType.MULTI_WAY:
 				return buildMultiwayIntersection (intersection, roads);
 		}
+
+		return null;
 	}
 
 	private GameObject buildOneWayIntersection (Intersection intersection, Road connectedRoad)
 	{
 
 
-
-
-		float roadEndWidth = connectedRoad.GetRoadWidth ();
-		float roadEndLength = roadEndWidth / 2;
-
-		Vector3 outVec = getOutgoingVector (intersection, connectedRoad).normalized * roadEndWidth / 2;
-		Vector3 rightVec = Quaternion.Euler (0, 90, 0) * outVec;
-		Vector3 leftVec = Quaternion.Euler (0, -90, 0) * outVec;
+		/**
+		 *
+		 * ================================= ^                   
+		 *                                   | << rightVec        
+		 *                                   |                    
+		 *                     vv outVec     |             
+		 * --------------------- <----------  -------->  - outVec
+		 *                                   |                    
+		 *                                   |                    
+		 *                                   | << leftVec         
+		 * ================================= v                  
+		 *
+		 *
+		 * 
+		 */
+		Vector3 outVec = getOutgoingVectorForOneWayIntersection(intersection, connectedRoad);
+		Vector3 rightVec = CoordinateForOneWayIntersection(intersection, connectedRoad, RightOrLeft.RIGHT);
+		Vector3 leftVec = CoordinateForOneWayIntersection(intersection, connectedRoad, RightOrLeft.LEFT);
 
 
 		GameObject rightObj = buildOuter (rightVec, -outVec, 4, intersection.position, intersection.customization);
@@ -85,78 +213,140 @@ public class IntersectionBuilder : MonoBehaviour
 
 	}
 
-	private GameObject buildTwoWayIntersection (Intersection intersection, Road road1, Road road2)
+	private Vector3 getOutgoingVectorForOneWayIntersection(Intersection intersection, Road connectedRoad)
+	{
+		float roadEndWidth = connectedRoad.GetRoadWidth ();
+		float roadEndLength = roadEndWidth / 2;
+		return getOutgoingVector (intersection, connectedRoad).normalized * roadEndWidth / 2;
+	}
+	
+	enum TwoWayIntersectionType { SKEW /* Sharop turn */ , SMOOTH /* Change road width */, 
+		TRANSITION /* just a curvature */}
+
+	private TwoWayIntersectionType GetTwoWayIntersectionType(Intersection intersection, Road road1, Road road2)
 	{
 		
-		Vector3 vec1 = getOutgoingVector (intersection, road1).normalized;
-		Vector3 vec2 = getOutgoingVector (intersection, road2).normalized;
+		Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
+		Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
 		// create a four way intersection instead of a two way intersection if the angle is less than 90
-		if (Vector3.Angle (vec1, vec2) < 90) {
-			Vector3[] vecs = { vec1, vec2, -vec1, -vec2 };
-			float[] roadWidths = { road1.GetRoadWidth (), road2.GetRoadWidth (), road1.GetRoadWidth (), road2.GetRoadWidth () };
-			// zip vecs and roadWidths into abstract road infos
-			AbstractWayInfo[] infos = AbstractWayInfo.InfosWithDirectionsAndWidths (vecs, roadWidths);
-			return buildMultiwayIntersectionWithVectors (intersection, infos);
+		if (Vector3.Angle(vec1, vec2) < 90)
+		{
+			return TwoWayIntersectionType.SKEW;
 		}
-
-		//force a four way intersection if two roads are of different width
-		if (Mathf.Approximately (road1.GetRoadWidth (), road2.GetRoadWidth ()) == false) {
-			// create a halfway rotation
-			Quaternion rotation = Quaternion.Euler (Quaternion.FromToRotation (vec1, vec2).eulerAngles / 2);
-			// this is the virtual directional vector
-			Vector3 newVec = rotation * vec1;
-			// this is the virtual road width, set it to be the average of the two
-			float newWidth = road1.GetRoadWidth () + road2.GetRoadWidth () / 2;
-
-			Vector3[] vecs = { vec1, vec2, newVec, -newVec };
-			float[] roadWidths = { road1.GetRoadWidth (), road2.GetRoadWidth (), newWidth, newWidth };
-
-			// zip vecs and roadWidths into abstract road infos
-			AbstractWayInfo[] infos = AbstractWayInfo.InfosWithDirectionsAndWidths (vecs, roadWidths);
-			return buildMultiwayIntersectionWithVectors (intersection, infos);
-
-
+		else //force a four way intersection if two roads are of different width
+		if (Mathf.Approximately(road1.GetRoadWidth(), road2.GetRoadWidth()) == false)
+		{
+			return TwoWayIntersectionType.TRANSITION;
 		}
+		else
+		{
+			return TwoWayIntersectionType.SMOOTH;
+		}
+	}
 
-		// only when angle > 90
 
-		float roadWidth1 = road1.GetRoadWidth ();
-		float roadWidth2 = road2.GetRoadWidth ();
-		Vector3 vec1Norm = Quaternion.Euler (new Vector3 (0, 90, 0)) * vec1 * roadWidth1 / 2;
-		Vector3 vec2Norm = Quaternion.Euler (new Vector3 (0, -90, 0)) * vec2 * roadWidth2 / 2;
-		// check the intersection, if there's its inner, if there isn't, its outer
-		Vector3 refPoint;
-		GameObject inner;
-		GameObject outer;
-		if (Math3d.LineLineIntersection (out refPoint, vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm, vec2 * MATH_3D_COMPENSATION)) {
-			// we intersected, its inner
-			inner = buildInner (vec1Norm, vec2Norm, refPoint, intersection.position, intersection.customization);
-			outer = buildOuter (-vec1Norm, -vec2Norm, 4, intersection.position, intersection.customization);
-		} else {
-			// we are outer 
-			outer = buildOuter (vec1Norm, vec2Norm, 4, intersection.position, intersection.customization);
-			// get the real intersection
-			// we need to * a const since the Math scirpt only considers line to be that long
-			if (Math3d.LineLineIntersection (out refPoint, -vec1Norm, vec1 * MATH_3D_COMPENSATION, -vec2Norm, vec2 * MATH_3D_COMPENSATION) == false) {
-				Debug.LogError ("Error creating intersection, Lines do not intersect");
-				// BUG: TODO: FIXIT
-				// BEHAVIOR: two lines intersect on the upper right corner, with less than 45 deg angle between them
-				/**	               
-				 *                 vvvvv Error Here
-				 * ------------------
-				 *                +
-				 *             +
-				 *         +
-				 *      +
-				 *   +
-				 * 
-				 */
-			}
-			inner = buildInner (-vec1Norm, -vec2Norm, refPoint, intersection.position, intersection.customization);
+	private AbstractWayInfo[] AbstractWayInfosForTwoWayIntersection(Intersection intersection, Road road1, Road road2)
+	{
+		Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
+		Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
+		// create a four way intersection instead of a two way intersection if the angle is less than 90
+		Vector3[] vecs = null;
+		float[] roadWidths = null;
+		switch (GetTwoWayIntersectionType(intersection, road1, road2))
+		{
+			case TwoWayIntersectionType.SKEW:
+
+			
+				vecs = new[] {vec1, vec2, -vec1, -vec2};
+				roadWidths = new[] {road1.GetRoadWidth(), road2.GetRoadWidth(), road1.GetRoadWidth(), road2.GetRoadWidth()};
+				break;
+
+			case TwoWayIntersectionType.TRANSITION:
+				// create a halfway rotation
+				Quaternion rotation = Quaternion.Euler(Quaternion.FromToRotation(vec1, vec2).eulerAngles / 2);
+				// this is the virtual directional vector
+				Vector3 newVec = rotation * vec1;
+				// this is the virtual road width, set it to be the average of the two
+				float newWidth = road1.GetRoadWidth() + road2.GetRoadWidth() / 2;
+
+				vecs = new[] {vec1, vec2, newVec, -newVec};
+				roadWidths = new[] {road1.GetRoadWidth(), road2.GetRoadWidth(), newWidth, newWidth};
+				break;
+			case TwoWayIntersectionType.SMOOTH:
+				Debug.LogError("Code Error, this method is to be called without smooth transition");
+
+				break;
 
 		}
-		// add rigidbody to enable selection
-		return createParentIntersectionWithChildIntersections ("Two way intersection", intersection.customization, inner, outer);
+		// zip vecs and roadWidths into abstract road infos
+        AbstractWayInfo[] infos = AbstractWayInfo.InfosWithDirectionsAndWidths(vecs, roadWidths);
+        return infos;
+	}
+
+
+	private GameObject buildTwoWayIntersection(Intersection intersection, Road road1, Road road2)
+	{
+
+		// create a four way intersection instead of a two way intersection if the angle is less than 90
+		switch (GetTwoWayIntersectionType(intersection, road1, road2))
+		{
+			case TwoWayIntersectionType.SKEW:
+			case TwoWayIntersectionType.TRANSITION:
+				AbstractWayInfo[] infos = AbstractWayInfosForTwoWayIntersection(intersection, road1, road2);
+                return buildMultiwayIntersectionWithVectors(intersection, infos);
+			case TwoWayIntersectionType.SMOOTH:
+                // only when angle > 90
+                Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
+                Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
+                float roadWidth1 = road1.GetRoadWidth();
+                float roadWidth2 = road2.GetRoadWidth();
+                Vector3 vec1Norm = Quaternion.Euler(new Vector3(0, 90, 0)) * vec1 * roadWidth1 / 2;
+                Vector3 vec2Norm = Quaternion.Euler(new Vector3(0, -90, 0)) * vec2 * roadWidth2 / 2;
+                // check the intersection, if there's its inner, if there isn't, its outer
+                Vector3 refPoint;
+                GameObject inner;
+                GameObject outer;
+                if (Math3d.LineLineIntersection(out refPoint, vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm,
+                    vec2 * MATH_3D_COMPENSATION))
+                {
+                    // we intersected, its inner
+                    inner = buildInner(vec1Norm, vec2Norm, refPoint, intersection.position, intersection.customization);
+                    outer = buildOuter(-vec1Norm, -vec2Norm, 4, intersection.position, intersection.customization);
+                }
+                else
+                {
+                    // we are outer 
+                    outer = buildOuter(vec1Norm, vec2Norm, 4, intersection.position, intersection.customization);
+                    // get the real intersection
+                    // we need to * a const since the Math scirpt only considers line to be that long
+                    if (Math3d.LineLineIntersection(out refPoint, -vec1Norm, vec1 * MATH_3D_COMPENSATION, -vec2Norm,
+                            vec2 * MATH_3D_COMPENSATION) == false)
+                    {
+                        Debug.LogError("Error creating intersection, Lines do not intersect");
+                        // BUG: TODO: FIXIT
+                        // BEHAVIOR: two lines intersect on the upper right corner, with less than 45 deg angle between them
+                        /**	               
+                         *                 vvvvv Error Here
+                         * ------------------
+                         *                +
+                         *             +
+                         *         +
+                         *      +
+                         *   +
+                         * 
+                         */
+                    }
+
+                    inner = buildInner(-vec1Norm, -vec2Norm, refPoint, intersection.position, intersection.customization);
+
+                }
+
+                // add rigidbody to enable selection
+                return createParentIntersectionWithChildIntersections("Two way intersection", intersection.customization, inner,
+                    outer);
+		}
+
+		return null;
 	}
 
 	private GameObject createParentIntersectionWithChildIntersections (string name, IntersectionCustomization customization, params GameObject[] childs)
@@ -296,43 +486,55 @@ public class IntersectionBuilder : MonoBehaviour
 
 	private GameObject buildMultiwayIntersection (Intersection intersection, Road[] connectedRoads)
 	{
-		// convert roads to vectos
-		Vector3[] vectors = connectedRoads.Select (rd => getOutgoingVector (intersection, rd)).ToArray ();
-		float[] widths = connectedRoads.Select (rd => rd.GetRoadWidth ()).ToArray ();
+		var infos = AbstractWayInfosForMultiwayIntersection(intersection, connectedRoads);
 
+		return buildMultiwayIntersectionWithVectors (intersection, infos);
+	}
 
+	private AbstractWayInfo[] AbstractWayInfosForMultiwayIntersection(Intersection intersection, Road[] connectedRoads)
+	{
+// convert roads to vectos
+		Vector3[] vectors = connectedRoads.Select(rd => getOutgoingVector(intersection, rd)).ToArray();
+		float[] widths = connectedRoads.Select(rd => rd.GetRoadWidth()).ToArray();
+
+		AbstractWayInfo[] infos;
 		// handle when connectedRoads.Length == 3  << build a four-way intersection instead
-		if (connectedRoads.Length == 3) {
+		if (connectedRoads.Length == 3)
+		{
 			// find the vector whose direction is of greatest difference to other two
 
-			Vector3 maxVector = vectors [0];
-			float maxRoadWidth = widths [0];
-			float maxAngles = 0; 
-			for (int i = 0; i < 3; i++) {
+			Vector3 maxVector = vectors[0];
+			float maxRoadWidth = widths[0];
+			float maxAngles = 0;
+			for (int i = 0; i < 3; i++)
+			{
 				float accum = 0;
-				for (int j = 0; j < 3; j++) {
-					float zeroTo180Angle = Vector3.Angle (vectors [i], vectors [j]);
+				for (int j = 0; j < 3; j++)
+				{
+					float zeroTo180Angle = Vector3.Angle(vectors[i], vectors[j]);
 					float distance = zeroTo180Angle > 90 ? 180 - zeroTo180Angle : zeroTo180Angle;
 					accum += distance;
 				}
-				if (accum > maxAngles) {
-					maxVector = vectors [i];
-					maxRoadWidth = widths [i];
+
+				if (accum > maxAngles)
+				{
+					maxVector = vectors[i];
+					maxRoadWidth = widths[i];
 					maxAngles = accum;
 				}
-				
 			}
 
-			Vector3[] resultingVectors = { vectors [0], vectors [1], vectors [2], -maxVector };
-			float[] resultingWidths = { widths [0], widths [1], widths [2], maxRoadWidth };
+			Vector3[] resultingVectors = {vectors[0], vectors[1], vectors[2], -maxVector};
+			float[] resultingWidths = {widths[0], widths[1], widths[2], maxRoadWidth};
 
-			var abstractWayInfos = AbstractWayInfo.InfosWithDirectionsAndWidths (resultingVectors, resultingWidths);
-			return buildMultiwayIntersectionWithVectors (intersection, abstractWayInfos);
-			
+			infos = AbstractWayInfo.InfosWithDirectionsAndWidths(resultingVectors, resultingWidths);
+		}
+		else
+		{
+			infos = AbstractWayInfo.InfosWithDirectionsAndWidths(vectors, widths);
 		}
 
-		AbstractWayInfo[] infos = AbstractWayInfo.InfosWithDirectionsAndWidths (vectors, widths);
-		return buildMultiwayIntersectionWithVectors (intersection, infos);
+		return infos;
 	}
 
 	private class AbstractWayInfo
@@ -356,43 +558,33 @@ public class IntersectionBuilder : MonoBehaviour
 			}
 			return infos;
 		}
+		public static AbstractWayInfo[] sortAbstractWayInfos(AbstractWayInfo[] outgoingWays)
+		{
+			return outgoingWays
+				.OrderBy (way => Quaternion.FromToRotation (Vector3.right, way.direction).eulerAngles.y)
+				.ToArray ();
+		}
 
+		public static bool operator ==(AbstractWayInfo info1, AbstractWayInfo info2)
+		{
+			return info1.direction.normalized == info2.direction.normalized
+			       && Mathf.Approximately(info1.roadWidth, info2.roadWidth);
+		}
 
+		public static bool operator !=(AbstractWayInfo info1, AbstractWayInfo info2)
+		{
+			return !(info1 == info2);
+		}
 	}
 
 
 	private GameObject buildMultiwayIntersectionWithVectors (Intersection intersection, AbstractWayInfo[] outgoingWays)
 	{
 		// sort vectors according to orientations first
-		AbstractWayInfo[] sorted = outgoingWays
-			.OrderBy (way => Quaternion.FromToRotation (Vector3.right, way.direction).eulerAngles.y)
-			.ToArray ();
+		AbstractWayInfo[] sorted = AbstractWayInfo.sortAbstractWayInfos(outgoingWays);
 		Mesh mesh = new Mesh ();
 
-		// get a list of intersection vertices
-		Vector3[] vertices = new Vector3[sorted.Length + 2];
-		for (int i = 0; i < sorted.Length; i++) {
-			AbstractWayInfo rd1 = sorted [i];
-			AbstractWayInfo rd2 = sorted [(i + 1) % sorted.Length];
-			// get intersection of rd1's right edge with rd2's left edge
-			Vector3 vec1 = rd1.direction.normalized;
-			Vector3 vec2 = rd2.direction.normalized;
-			Vector3 vec1Norm = Quaternion.Euler (new Vector3 (0, 90, 0)) * vec1 * rd1.roadWidth / 2;
-			Vector3 vec2Norm = Quaternion.Euler (new Vector3 (0, -90, 0)) * vec2 * rd2.roadWidth / 2;
-
-			// TODO : 
-			bool res = Math3d.LineLineIntersection (out vertices [i], vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm, vec2 * MATH_3D_COMPENSATION);
-			if (res == false) {
-				res = Math3d.LineLineIntersection (out vertices [i], vec1Norm, -vec1 * MATH_3D_COMPENSATION, vec2Norm, -vec2 * MATH_3D_COMPENSATION);
-				if (res == false) {
-					Debug.LogWarning ("Error when creating intersection: Line intersection does not exist");
-				}
-			}
-			Debug.LogFormat ("vec1 = {2}, vec2 = {3}, Vertex ({0}) : {1}", i, vertices [i], vec1, vec2);
-		}
-		vertices [sorted.Length] = vertices [0]; // the second last vertex is the first (for UV)
-		vertices [sorted.Length + 1] = Vector3.zero; // the last vertex is the intersection center
-		Debug.LogFormat ("Vertex ({0}) : {1}", sorted.Length, vertices [sorted.Length]);
+		var vertices = MeshVerticesForAbstractWayInfos(sorted);
 		mesh.vertices = vertices;
 
 		int[] triangles = new int[outgoingWays.Length * 3];
@@ -436,6 +628,57 @@ public class IntersectionBuilder : MonoBehaviour
 
 
 		return intersectionObj;
+
+	}
+
+	
+
+	/**
+	 * Assume the input vertices are sorted, 
+	 */
+	private Vector3[] MeshVerticesForAbstractWayInfos(AbstractWayInfo[] sorted)
+	{
+// get a list of intersection vertices
+		Vector3[] vertices = new Vector3[sorted.Length + 2];
+		for (int i = 0; i < sorted.Length; i++)
+		{
+			AbstractWayInfo rd1 = sorted[i];
+			AbstractWayInfo rd2 = sorted[(i + 1) % sorted.Length];
+			vertices[i] = CoordinateOfIntersectionBetweenTwoWays(rd1, rd2);
+			Debug.LogFormat("vec1 = {2}, vec2 = {3}, Vertex ({0}) : {1}", i, vertices[i], rd1.direction, rd2.direction);
+		}
+
+		vertices[sorted.Length] = vertices[0]; // the second last vertex is the first (for UV)
+		vertices[sorted.Length + 1] = Vector3.zero; // the last vertex is the intersection center
+		Debug.LogFormat("Vertex ({0}) : {1}", sorted.Length, vertices[sorted.Length]);
+		return vertices;
+	}
+
+	// get intersection of rd1's right edge with rd2's left edge
+	private Vector3 CoordinateOfIntersectionBetweenTwoWays(AbstractWayInfo rd1, AbstractWayInfo rd2)
+	{
+
+		Vector3 coordinateRes;
+		
+		Vector3 vec1 = rd1.direction.normalized;
+		Vector3 vec2 = rd2.direction.normalized;
+		Vector3 vec1Norm = Quaternion.Euler(new Vector3(0, 90, 0)) * vec1 * rd1.roadWidth / 2;
+		Vector3 vec2Norm = Quaternion.Euler(new Vector3(0, -90, 0)) * vec2 * rd2.roadWidth / 2;
+
+		// TODO : 
+		bool res = Math3d.LineLineIntersection(out coordinateRes, vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm,
+			vec2 * MATH_3D_COMPENSATION);
+		if (res == false)
+		{
+			res = Math3d.LineLineIntersection(out coordinateRes, vec1Norm, -vec1 * MATH_3D_COMPENSATION, vec2Norm,
+				-vec2 * MATH_3D_COMPENSATION);
+			if (res == false)
+			{
+				Debug.LogWarning("Error when creating intersection: Line intersection does not exist");
+			}
+		}
+
+		return coordinateRes;
 
 	}
 
@@ -487,6 +730,11 @@ public class IntersectionBuilder : MonoBehaviour
 	
 		return angle;
 		
+	}
+
+	Road[] GetOrderedRoadsForIntersection(Intersection intersection)
+	{
+		return intersection.getConnectedRoads().OrderBy(rd => getAngle(intersection, rd).eulerAngles.y).ToArray();
 	}
 }
 
