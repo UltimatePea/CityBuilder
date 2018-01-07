@@ -21,6 +21,8 @@
         <e p="Scripts" t="Include">
           <e p="Builders" t="Include">
             <e p="IntersectionBuilder.cs" t="Include" />
+            <e p="IntersectionCustomizationBuilder.cs" t="Include" />
+            <e p="IntersectionMath.cs" t="Include" />
             <e p="RoadBuilder.cs" t="Include" />
           </e>
           <e p="Controllers" t="Include">

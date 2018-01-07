@@ -7,16 +7,18 @@ using System;
 
 
 
-public class IntersectionBuilder : MonoBehaviour
+public partial class IntersectionBuilder : MonoBehaviour
 {
 	private float MATH_3D_COMPENSATION = 100f;
 	// compensation for math3d line intersection algorithm
 	public GameObject fourWayIntersectionPrefab;
 	public GameObject oneWayIntersectionPrefab;
-	
-	enum IntersectionType { NONE, ONE_WAY, TWO_WAY, MULTI_WAY}
 
-	private IntersectionType GetIntersectionType(Intersection intersection)
+	public IntersectionCustomizationBuilder customizationBuilder;
+	
+	public enum IntersectionType { NONE, ONE_WAY, TWO_WAY, MULTI_WAY}
+
+	public IntersectionType GetIntersectionType(Intersection intersection)
 	{
 		Road[] roads = intersection.getConnectedRoads ();
 		if (roads.Length == 0)
@@ -96,7 +98,7 @@ public class IntersectionBuilder : MonoBehaviour
 
 	private Vector3 CoordinateForTwoWayIntersection(Intersection intersection, Road connectedRoad, RightOrLeft rtlt)
 	{
-		switch (GetTwoWayIntersectionType(intersection, intersection.getConnectedRoads()[0], intersection.getConnectedRoads()[1]))
+		switch (GetTwoWayIntersectionType(intersection))
 		{
 		case TwoWayIntersectionType.SKEW:
 		case TwoWayIntersectionType.TRANSITION:
@@ -125,7 +127,7 @@ public class IntersectionBuilder : MonoBehaviour
 		infos = AbstractWayInfo.sortAbstractWayInfos(infos);
 
 		// convert the road to an abstract way info
-		AbstractWayInfo info = new AbstractWayInfo(getOutgoingVector(intersection, connectedRoad).normalized,
+		AbstractWayInfo info = new AbstractWayInfo(IntersectionMath.getOutgoingVector(intersection, connectedRoad).normalized,
 			connectedRoad.GetRoadWidth());
 		// TODO : CHECK FOR nonexistent index
 		int index = 0;
@@ -168,19 +170,27 @@ public class IntersectionBuilder : MonoBehaviour
 	// build a single intersection, returns the created game object
 	public GameObject BuildIntersection (Intersection intersection)
 	{
-		Road[] roads = intersection.getConnectedRoads ();
+		GameObject baseObj =  BuildBaseTerrain(intersection);
+		GameObject obj2 = customizationBuilder.buildCustomization(baseObj, intersection);
+		return obj2;
+	}
+
+	private GameObject BuildBaseTerrain(Intersection intersection)
+	{
+		Road[] roads = intersection.getConnectedRoads();
 		// no intersection if no roads
 		switch (GetIntersectionType(intersection))
 		{
 			case IntersectionType.NONE:
-				return new GameObject ("intersection");
+				return new GameObject("intersection");
 			case IntersectionType.ONE_WAY:
-				return buildOneWayIntersection (intersection, roads [0]);
+				return buildOneWayIntersection(intersection, roads[0]);
 			case IntersectionType.TWO_WAY:
-				return buildTwoWayIntersection (intersection, roads [0], roads [1]);
+				return buildTwoWayIntersection(intersection, roads[0], roads[1]);
 			case IntersectionType.MULTI_WAY:
-				return buildMultiwayIntersection (intersection, roads);
+				return buildMultiwayIntersection(intersection, roads);
 		}
+
 		Debug.LogError("Semantics Error, please check");
 
 		return null;
@@ -222,17 +232,19 @@ public class IntersectionBuilder : MonoBehaviour
 	{
 		float roadEndWidth = connectedRoad.GetRoadWidth ();
 		float roadEndLength = roadEndWidth / 2;
-		return getOutgoingVector (intersection, connectedRoad).normalized * roadEndWidth / 2;
+		return IntersectionMath.getOutgoingVector (intersection, connectedRoad).normalized * roadEndWidth / 2;
 	}
 	
-	enum TwoWayIntersectionType { SKEW /* Sharop turn */ , SMOOTH /* Change road width */, 
+	public enum TwoWayIntersectionType { SKEW /* Sharop turn */ , SMOOTH /* Change road width */, 
 		TRANSITION /* just a curvature */}
 
-	private TwoWayIntersectionType GetTwoWayIntersectionType(Intersection intersection, Road road1, Road road2)
+	public TwoWayIntersectionType GetTwoWayIntersectionType(Intersection intersection)
 	{
+		Road road1 = intersection.getConnectedRoads()[0];
+		Road road2 = intersection.getConnectedRoads()[1];
 		
-		Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
-		Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
+		Vector3 vec1 = IntersectionMath.getOutgoingVector(intersection, road1).normalized;
+		Vector3 vec2 = IntersectionMath.getOutgoingVector(intersection, road2).normalized;
 		// create a four way intersection instead of a two way intersection if the angle is less than 90
 		if (Vector3.Angle(vec1, vec2) < 90)
 		{
@@ -252,12 +264,12 @@ public class IntersectionBuilder : MonoBehaviour
 
 	private AbstractWayInfo[] AbstractWayInfosForTwoWayIntersection(Intersection intersection, Road road1, Road road2)
 	{
-		Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
-		Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
+		Vector3 vec1 = IntersectionMath.getOutgoingVector(intersection, road1).normalized;
+		Vector3 vec2 = IntersectionMath.getOutgoingVector(intersection, road2).normalized;
 		// create a four way intersection instead of a two way intersection if the angle is less than 90
 		Vector3[] vecs = null;
 		float[] roadWidths = null;
-		switch (GetTwoWayIntersectionType(intersection, road1, road2))
+		switch (GetTwoWayIntersectionType(intersection))
 		{
 			case TwoWayIntersectionType.SKEW:
 
@@ -293,7 +305,7 @@ public class IntersectionBuilder : MonoBehaviour
 	{
 
 		// create a four way intersection instead of a two way intersection if the angle is less than 90
-		switch (GetTwoWayIntersectionType(intersection, road1, road2))
+		switch (GetTwoWayIntersectionType(intersection))
 		{
 			case TwoWayIntersectionType.SKEW:
 			case TwoWayIntersectionType.TRANSITION:
@@ -301,8 +313,8 @@ public class IntersectionBuilder : MonoBehaviour
                 return buildMultiwayIntersectionWithVectors(intersection, infos);
 			case TwoWayIntersectionType.SMOOTH:
                 // only when angle > 90
-                Vector3 vec1 = getOutgoingVector(intersection, road1).normalized;
-                Vector3 vec2 = getOutgoingVector(intersection, road2).normalized;
+                Vector3 vec1 = IntersectionMath.getOutgoingVector(intersection, road1).normalized;
+                Vector3 vec2 = IntersectionMath.getOutgoingVector(intersection, road2).normalized;
                 float roadWidth1 = road1.GetRoadWidth();
                 float roadWidth2 = road2.GetRoadWidth();
                 Vector3 vec1Norm = Quaternion.Euler(new Vector3(0, 90, 0)) * vec1 * roadWidth1 / 2;
@@ -500,7 +512,7 @@ public class IntersectionBuilder : MonoBehaviour
 	private AbstractWayInfo[] AbstractWayInfosForMultiwayIntersection(Intersection intersection, Road[] connectedRoads)
 	{
 // convert roads to vectos
-		Vector3[] vectors = connectedRoads.Select(rd => getOutgoingVector(intersection, rd)).ToArray();
+		Vector3[] vectors = connectedRoads.Select(rd => IntersectionMath.getOutgoingVector(intersection, rd)).ToArray();
 		float[] widths = connectedRoads.Select(rd => rd.GetRoadWidth()).ToArray();
 
 		AbstractWayInfo[] infos;
@@ -699,6 +711,7 @@ public class IntersectionBuilder : MonoBehaviour
 		GameObject intersectionObj = Instantiate (prefab, elevatedPos, Quaternion.identity);
 		MeshFilter objMeshFilter = intersectionObj.GetComponent<MeshFilter> ();
 		objMeshFilter.mesh = mesh;
+		//TODO : Change to Sphere Collider instead of Mesh Collider
 		MeshCollider objMeshCollider = intersectionObj.GetComponent<MeshCollider> ();
 		objMeshCollider.sharedMesh = mesh;
 		intersectionObj.layer = customization.isTemporary ? GlobalLayers.IgnoreRaycast : GlobalLayers.Default;
@@ -706,41 +719,5 @@ public class IntersectionBuilder : MonoBehaviour
 	}
 
 	// TODO Combine below two methods
-	Vector3 getOutgoingVector (Intersection intersection, Road road)
-	{
-		Vector3 vec = Vector3.zero;
-		switch (road.typeOfIntersection (intersection)) {
-		case Road.IntersectionClass.FROM:
-			vec = road.toIntersection.position - road.fromIntersection.position;
-			break;
-		case Road.IntersectionClass.TO:
-			vec = road.fromIntersection.position - road.toIntersection.position;
-			break;
-		}
-	
-		return vec;
-		
-	}
-
-	Quaternion getAngle (Intersection intersection, Road road)
-	{
-		Quaternion angle = Quaternion.identity;
-		switch (road.typeOfIntersection (intersection)) {
-		case Road.IntersectionClass.FROM:
-			angle = Quaternion.FromToRotation (Vector3.right, road.toIntersection.position - road.fromIntersection.position);
-			break;
-		case Road.IntersectionClass.TO:
-			angle = Quaternion.FromToRotation (Vector3.right, road.fromIntersection.position - road.toIntersection.position);
-			break;
-		}
-	
-		return angle;
-		
-	}
-
-	Road[] GetOrderedRoadsForIntersection(Intersection intersection)
-	{
-		return intersection.getConnectedRoads().OrderBy(rd => getAngle(intersection, rd).eulerAngles.y).ToArray();
-	}
 }
 

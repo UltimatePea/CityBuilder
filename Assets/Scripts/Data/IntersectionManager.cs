@@ -13,7 +13,8 @@ public class IntersectionManager : MonoBehaviour
 	// temporary intersection cannot be retrieved via game object
 	public Intersection createTemporaryIntersection (Vector3 position)
 	{
-		Intersection temp = new  Intersection (position, new IntersectionCustomization (true));
+		Intersection temp = new  Intersection (position, new IntersectionCustomization (isTemporary:true, 
+			trafficControlStyle:IntersectionCustomization.TrafficControlStyle.ALL_WAY_STOP_SIGN));
 		temporaryIntersections.Add (temp);
 		return temp;
 	}
@@ -57,7 +58,8 @@ public class IntersectionManager : MonoBehaviour
 
 	public Intersection createIntersection (Vector3 position)
 	{
-		Intersection intersec = new Intersection (position, new IntersectionCustomization (false));
+		Intersection intersec = new Intersection (position, new IntersectionCustomization (isTemporary: false, 
+			trafficControlStyle: IntersectionCustomization.TrafficControlStyle.ALL_WAY_STOP_SIGN));
 		allInstances.Add (intersec);
 		return intersec;
 	}
