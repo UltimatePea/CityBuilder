@@ -394,6 +394,7 @@ GameObject:
   - component: {fileID: 1032594819}
   - component: {fileID: 1032594818}
   - component: {fileID: 1032594817}
+  - component: {fileID: 1032594820}
   m_Layer: 0
   m_Name: Builders
   m_TagString: Builder
@@ -429,6 +430,7 @@ MonoBehaviour:
     type: 2}
   oneWayIntersectionPrefab: {fileID: 1102602806699128, guid: 4ced7e3a214f74dc692d048f8b975a86,
     type: 2}
+  customizationBuilder: {fileID: 1032594820}
 --- !u!4 &1032594819
 Transform:
   m_ObjectHideFlags: 0
@@ -442,6 +444,20 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1032594820
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1032594816}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9aab711502c274ad8a096ec7dd63cd5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intersectionBuilder: {fileID: 1032594818}
+  stopSignPrefab: {fileID: 1149324125556894, guid: 74cd47da3324d4d62a30ba92439a77e6,
+    type: 2}
 --- !u!1 &2082548757
 GameObject:
   m_ObjectHideFlags: 0
