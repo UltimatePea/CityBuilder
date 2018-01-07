@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: b4d8a32f749654be0b1553bf9a712c95
+timeCreated: 1515352007
+licenseType: Free
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - redLightOnMat: {fileID: 2100000, guid: d1af19bb71143432b8e5f284d77b2dd4, type: 2}
+  - redLightMediumMat: {fileID: 2100000, guid: a2d9fe32f8c2645c3ac78df45a9ca629, type: 2}
+  - redLightOffMat: {fileID: 2100000, guid: b89fb2e54cba645e58be49d34ee1d908, type: 2}
+  - yellowLightOnMat: {fileID: 2100000, guid: 1bdf697cf657b4e7a91c8b465f6ff7d2, type: 2}
+  - yellowLightOffMat: {fileID: 2100000, guid: 1f1b3d2d9f7f94e3ba3fc965eebe5100, type: 2}
+  - whiteLightOnMat: {fileID: 2100000, guid: 86c56816cd0074543952cae696960fb1, type: 2}
+  - whiteLightOffMat: {fileID: 2100000, guid: e15609d57a1aa4c28bbbdcd8416cd854, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
