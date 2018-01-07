@@ -6,25 +6,35 @@ public class RoadBuilder : MonoBehaviour
 {
 
 	public GameObject roadPrefab;
+	public IntersectionBuilder intersectionBuilder;// we need to query intersection builder for coordinate information
 
 	public GameObject BuildRoad (Road road)
 	{
 
 		Vector3 start = road.fromIntersection.position;
 		Vector3 end = road.toIntersection.position;
+		/**
+		 * FROM LEFT 3 ------------------------- TO RIGHT 2 
+		 *
+		 * start                                      end
+		 * 
+		 * FROM RIGHT 0 -------------------------- TO LEFT 1
+		 *
+		 *
+		 * 0
+		 * 
+		 */
 
-		float roadLength = Vector3.Distance (start, end);
-		Quaternion rotation = Quaternion.FromToRotation (Vector3.right, end - start);
 
 
 		Mesh mesh = new Mesh ();
 
 		float width = road.GetRoadWidth ();
 		Vector3[] verticies = {
-			new Vector3 (0, 0, -width / 2),
-			new Vector3 (roadLength, 0, -width / 2),
-			new Vector3 (roadLength, 0, width / 2),
-			new Vector3 (0, 0, width / 2)
+			intersectionBuilder.coordinateForRoadAtIntersection(road.fromIntersection, road, IntersectionBuilder.RightOrLeft.RIGHT),
+			intersectionBuilder.coordinateForRoadAtIntersection(road.toIntersection, road, IntersectionBuilder.RightOrLeft.LEFT) + end - start,
+			intersectionBuilder.coordinateForRoadAtIntersection(road.toIntersection, road, IntersectionBuilder.RightOrLeft.RIGHT) + end - start,
+			intersectionBuilder.coordinateForRoadAtIntersection(road.fromIntersection, road, IntersectionBuilder.RightOrLeft.LEFT),
 		};
 
 		mesh.vertices = verticies;
@@ -35,14 +45,17 @@ public class RoadBuilder : MonoBehaviour
 		};
 		mesh.triangles = triangles;
 
+		float distance = Vector3.Distance(verticies[0], verticies[1]);
 		Vector2[] uv = {
 
 			new Vector2 (0, 0),
-			new Vector2 (roadLength, 0),
-			new Vector2 (roadLength, 1),
-			new Vector2 (0, 1)
+			new Vector2 (distance, 0),
+			new Vector2 (Vector3.Dot(verticies[2] - verticies[0], verticies[1] - verticies[0]) / distance, 1),
+			new Vector2 (Vector3.Dot(verticies[3] - verticies[0], verticies[1] - verticies[0]) / distance, 1)
 
+			
 		};
+		Debug.LogFormat("UV = {0}{1}{2}{3}", uv[0], uv[1], uv[2], uv[3]);
 		mesh.uv = uv;
 
 		Vector3[] normals = {
@@ -59,7 +72,7 @@ public class RoadBuilder : MonoBehaviour
 
 
 		Vector3 roadPosition = start + new Vector3 (0, 0.01f, 0);
-		GameObject obj = Instantiate (roadPrefab, roadPosition, rotation);
+		GameObject obj = Instantiate (roadPrefab, roadPosition, Quaternion.identity);
 //		obj.transform.parent = road.fromIntersection.GetGameObject ().transform;
 
 

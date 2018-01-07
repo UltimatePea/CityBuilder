@@ -413,6 +413,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   roadPrefab: {fileID: 1102602806699128, guid: b29a666a8000d446f94cc1b30d8c008c, type: 2}
+  intersectionBuilder: {fileID: 1032594818}
 --- !u!114 &1032594818
 MonoBehaviour:
   m_ObjectHideFlags: 0

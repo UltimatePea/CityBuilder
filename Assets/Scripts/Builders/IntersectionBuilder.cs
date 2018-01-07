@@ -72,6 +72,7 @@ public class IntersectionBuilder : MonoBehaviour
 			case IntersectionType.MULTI_WAY:
 				return CoordinateForMultiwayIntersection(intersection, road, rtlt);
 		}
+		Debug.LogError("Semantics Error, please check");
 
 		return Vector3.zero;
 	}
@@ -89,6 +90,7 @@ public class IntersectionBuilder : MonoBehaviour
 					return rightVec;
 		}
 
+		Debug.LogError("Semantics Error, please check");
 		return Vector3.zero;
 	}
 
@@ -107,6 +109,7 @@ public class IntersectionBuilder : MonoBehaviour
 			return CoordinateForOneWayIntersection(intersection, connectedRoad, rtlt);
 		}
 
+		Debug.LogError("Semantics Error, please check");
 		return Vector3.zero;
 	}
 
@@ -139,10 +142,11 @@ public class IntersectionBuilder : MonoBehaviour
 		switch (rtlt)
 		{
 			case RightOrLeft.LEFT:
-				return vertices[index - 1 < 0 ? infos.Length : index - 1];
+				return vertices[index - 1 < 0 ? infos.Length - 1 : index - 1];
 			case RightOrLeft.RIGHT:
 				return vertices[index];
 		}
+		Debug.LogError("Semantics Error, please check");
 
 		return Vector3.zero;
 	}
@@ -177,6 +181,7 @@ public class IntersectionBuilder : MonoBehaviour
 			case IntersectionType.MULTI_WAY:
 				return buildMultiwayIntersection (intersection, roads);
 		}
+		Debug.LogError("Semantics Error, please check");
 
 		return null;
 	}
@@ -346,6 +351,7 @@ public class IntersectionBuilder : MonoBehaviour
                     outer);
 		}
 
+		Debug.LogError("Semantics Error, please check");
 		return null;
 	}
 
