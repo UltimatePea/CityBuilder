@@ -663,12 +663,12 @@ public partial class IntersectionBuilder : MonoBehaviour
 			AbstractWayInfo rd1 = sorted[i];
 			AbstractWayInfo rd2 = sorted[(i + 1) % sorted.Length];
 			vertices[i] = CoordinateOfIntersectionBetweenTwoWays(rd1, rd2);
-			Debug.LogFormat("vec1 = {2}, vec2 = {3}, Vertex ({0}) : {1}", i, vertices[i], rd1.direction, rd2.direction);
+			//Debug.LogFormat("vec1 = {2}, vec2 = {3}, Vertex ({0}) : {1}", i, vertices[i], rd1.direction, rd2.direction);
 		}
 
 		vertices[sorted.Length] = vertices[0]; // the second last vertex is the first (for UV)
 		vertices[sorted.Length + 1] = Vector3.zero; // the last vertex is the intersection center
-		Debug.LogFormat("Vertex ({0}) : {1}", sorted.Length, vertices[sorted.Length]);
+		//Debug.LogFormat("Vertex ({0}) : {1}", sorted.Length, vertices[sorted.Length]);
 		return vertices;
 	}
 

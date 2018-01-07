@@ -55,7 +55,7 @@ public class RoadBuilder : MonoBehaviour
 
 			
 		};
-		Debug.LogFormat("UV = {0}{1}{2}{3}", uv[0], uv[1], uv[2], uv[3]);
+		//Debug.LogFormat("UV = {0}{1}{2}{3}", uv[0], uv[1], uv[2], uv[3]);
 		mesh.uv = uv;
 
 		Vector3[] normals = {
