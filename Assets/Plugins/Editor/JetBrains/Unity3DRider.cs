@@ -652,6 +652,11 @@ namespace Plugins.Editor.JetBrains
 
     static RiderPlugin()
     {
+      
+      // I added this return to supress error
+      return;
+      
+      
       var riderPath = GetDefaultApp();
       if (!RiderPathExist(riderPath))
         return;
