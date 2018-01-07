@@ -16,7 +16,7 @@ public class Intersection
 		set {
 			_position = value;
 			// TODO update all roads mesh and this's mesh;
-			connectedRoads.ForEach (rd => rd.UpdateGameObject (this));
+			connectedRoads.ForEach (rd => rd.UpdateGameObjectAndOtherIntersection (this));
 			this.gameObject = builder.UpdateIntersection (this, gameObject);
 		}
 	}
@@ -44,6 +44,20 @@ public class Intersection
 	public void UpdateGameObject ()
 	{
 		this.gameObject = builder.UpdateIntersection (this, gameObject);
+	}
+
+	public void UpdateGameObjectAndAllConnectedRoadsExcept(Road road)
+	{
+		this.gameObject = builder.UpdateIntersection (this, gameObject);
+		foreach (Road rd in this.getConnectedRoads())
+		{
+			if (rd != road)
+			{
+				rd.UpdateGameObject();
+			}
+				
+		}
+		
 	}
 
 	public GameObject GetGameObject ()

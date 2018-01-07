@@ -34,15 +34,20 @@ public class Road
 
 	}
 
-	public void UpdateGameObject (Intersection callingIntersection)
+	public void UpdateGameObject()
+	{
+		this.gameObject = this.builder.UpdateRoad (this, this.gameObject);
+	}
+
+	public void UpdateGameObjectAndOtherIntersection (Intersection callingIntersection)
 	{
 		this.gameObject = this.builder.UpdateRoad (this, this.gameObject);
 		switch (typeOfIntersection (callingIntersection)) {
 		case IntersectionClass.FROM:
-			this.toIntersection.UpdateGameObject ();
+			this.toIntersection.UpdateGameObjectAndAllConnectedRoadsExcept(this);
 			break;
 		case IntersectionClass.TO:
-			this.fromIntersection.UpdateGameObject ();
+			this.fromIntersection.UpdateGameObjectAndAllConnectedRoadsExcept(this);
 			break;
 		case IntersectionClass.NONE:
 			break;
