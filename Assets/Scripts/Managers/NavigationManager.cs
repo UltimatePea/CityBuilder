@@ -10,7 +10,9 @@ public class NavigationManager : MonoBehaviour
     // car is at the parameter intersection
     public Road targetWayForAbstractCarAtIntersection(AbstractCar car, Intersection intersection)
     {
-        return intersection.getConnectedRoads()[Random.Range(0, intersection.getConnectedRoads().Length - 1)];
+        int pickedIndex = Random.Range(0, intersection.getConnectedRoads().Length);
+        Debug.LogFormat("Picked {0} out of {1} ", pickedIndex, intersection.getConnectedRoads().Length);
+        return intersection.getConnectedRoads()[pickedIndex];
         // TODO: Use a realistic navigation algorithm
 
     }
