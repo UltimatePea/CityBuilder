@@ -145,6 +145,14 @@ public class Math3d : MonoBehaviour
 			intersection = linePoint1;
 			return true;
 		}
+		// check parallel
+		float dot = Vector3.Dot(lineVec1.normalized , lineVec2.normalized);
+		if (Mathf.Approximately(dot, 1) ||  Mathf.Approximately(dot, -1))
+		{
+			// if parallel, intersection is in between
+			intersection = (linePoint1 + linePoint2 )/ 2;
+			return Mathf.Approximately(dot, -1); // they intersect if vectors are pointing in opposite direction
+		}
 		// USER ADDED CODE END //
 
         

@@ -44,7 +44,8 @@ public class IntersectionTrafficControl
 				Road targetRoad = navigationManager.targetWayForAbstractCarAtIntersection (currentlyOperatingCar, referenceIntersection);
 				
 				// get target abstract position
-				AbstractCarPosition targetAbstractPosition = new AbstractCarPosition (targetRoad, referenceIntersection, 0, 0);
+				AbstractCarPosition targetAbstractPosition = new AbstractCarPosition (targetRoad, referenceIntersection, 
+					0, currentlyOperatingCar.position.laneNumber);
 				float startingDistance = trafficMath.startingDistanceForCurrentDrive (targetAbstractPosition);
 				targetAbstractPosition.offset = startingDistance;
 				// get current and target real location
@@ -60,7 +61,9 @@ public class IntersectionTrafficControl
 			}
 		} else {
 			// animate
-			const float turningDuration = 1f;
+			// very little animation if it is just a curve
+			float turningDuration = referenceIntersection.GetGraphicsType() == Intersection.IntersectionGraphicsType.TWO_WAY_SMOOTH ? 
+				0.1f : 1f;
 			// end if necessary
 			if (Time.time - startTime > turningDuration) {
 				// we end turning and proceed to the following route

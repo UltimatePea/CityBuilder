@@ -32,59 +32,70 @@ public class RoadTrafficControl
 			
 		}
 		
-		//TODO: sort list first instead of doing it on the fly
-		// processing each lane seperately
+		// processing each lane seperately each direction seperately
 		
 		int maxLaneNumber = cars.Max(c => c.position.laneNumber);
 
 		for (int i = 0; i < maxLaneNumber + 1; i++)
 		{
-			AbstractCar[] sortedCars = cars.Where(c => c.position.laneNumber == i).OrderByDescending(c => c.position.offset).ToArray();
-			for (int j = 0; j < sortedCars.Length; j++)
-			{
-				AbstractCar car = sortedCars[j];
-				// check if this is the first car
-				// TODO: Reduce code copying
-				if (j == 0)
-				{
-					// move the first car into the intersection if necessary
-					float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(car.position);
-					if (car.position.offset < stoppingDistance) 
-					{
-						car.position.offset += Time.deltaTime * 5;
-						//we should not exceed the stopping distance
-						if (car.position.offset > stoppingDistance)
-						{
-							car.position.offset = stoppingDistance;
-
-							moveCarToIntersection(car);
-						}
-					}	
-					car.updateCarPosition();
-				}
-				else
-				{
-					// let the car follow the previous car
-					int MIN_DIST = 2;
-					float stoppingDistance = sortedCars[j - 1].position.offset - MIN_DIST;
-					if (car.position.offset < stoppingDistance) 
-					{
-						car.position.offset += Time.deltaTime * 5;
-						//we should not exceed the stopping distance
-						if (car.position.offset > stoppingDistance)
-						{
-							car.position.offset = stoppingDistance;
-
-						}
-					}	
-					car.updateCarPosition();
-				}
-			}
+			processCarsWithLaneNumberAndRefernceIntersection(i, referenceRoad.fromIntersection);
+			processCarsWithLaneNumberAndRefernceIntersection(i, referenceRoad.toIntersection);
 		}
 		
 		
 		
 
+	}
+
+	private void processCarsWithLaneNumberAndRefernceIntersection(int laneNumber, Intersection refIntersection)
+	{
+		//TODO: sort list first instead of doing it on the fly
+		AbstractCar[] sortedCars = cars
+			.Where(c => c.position.referenceIntersection == refIntersection)
+			.Where(c => c.position.laneNumber == laneNumber)
+			.OrderByDescending(c => c.position.offset)
+			.ToArray();
+		for (int j = 0; j < sortedCars.Length; j++)
+		{
+			AbstractCar car = sortedCars[j];
+			// check if this is the first car
+			// TODO: Reduce code copying
+			if (j == 0)
+			{
+				// move the first car into the intersection if necessary
+				float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(car.position);
+				if (car.position.offset < stoppingDistance)
+				{
+					car.position.offset += Time.deltaTime * 5;
+					//we should not exceed the stopping distance
+					if (car.position.offset > stoppingDistance)
+					{
+						car.position.offset = stoppingDistance;
+
+						moveCarToIntersection(car);
+					}
+				}
+
+				car.updateCarPosition();
+			}
+			else
+			{
+				// let the car follow the previous car
+				int MIN_DIST = 2;
+				float stoppingDistance = sortedCars[j - 1].position.offset - MIN_DIST;
+				if (car.position.offset < stoppingDistance)
+				{
+					car.position.offset += Time.deltaTime * 5;
+					//we should not exceed the stopping distance
+					if (car.position.offset > stoppingDistance)
+					{
+						car.position.offset = stoppingDistance;
+					}
+				}
+
+				car.updateCarPosition();
+			}
+		}
 	}
 
 	private void moveCarToIntersection(AbstractCar car)
