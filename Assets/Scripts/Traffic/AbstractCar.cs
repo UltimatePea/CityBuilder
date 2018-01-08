@@ -4,32 +4,18 @@ using UnityEngine;
 
 
 
-public class AbstractCarPosition
-{
-    public Road referenceRoad;
-    public Intersection referenceIntersection;// the intersection to count offset from, also determines the direction of travel
-    public float offset;
-    public int laneNumber; // the lane with inner most at 0 
-
-    public AbstractCarPosition(Road referenceRoad, Intersection referenceIntersection, float offset, int laneNumber)
-    {
-        this.referenceRoad = referenceRoad;
-        this.referenceIntersection = referenceIntersection;
-        this.offset = offset;
-        this.laneNumber = laneNumber;
-    }
-}
-
 public class AbstractCar
 {
-    public AbstractCar(AbstractCarPosition position, GameObject carGameObject)
+    public AbstractCar(AbstractCarPosition position, GameObject carGameObject, IntersectionTrafficMath trafficMath)
     {
         this.position = position;
         this.carGameObject = carGameObject;
+        this.trafficMath = trafficMath;
     }
 
     public AbstractCarPosition position;
     public GameObject carGameObject;
+    private IntersectionTrafficMath trafficMath;
 
     public void updateCarPosition()
     {
@@ -81,7 +67,7 @@ public class AbstractCar
     // TODO: Delete this
     public void moveForwardMathOnly(float amount)
     {
-        if (position.offset < position.referenceRoad.GetRoadLength())
+        if (position.offset < trafficMath.stoppingDistanceForCurrentDrive(position))
         {
             position.offset += amount;
         }
