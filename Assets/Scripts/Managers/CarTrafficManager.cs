@@ -8,6 +8,7 @@ public class CarTrafficManager : MonoBehaviour
 {
 
 	public float carSpeed;
+	public IntersectionTrafficMath trafficMath;
 
 	private List<AbstractCar> cars = new List<AbstractCar> ();
 
@@ -53,7 +54,7 @@ public class CarTrafficManager : MonoBehaviour
 	public void addNewRoad(Road road)
 	{
 		allRoads.Add(road);
-		allRoadControls.Add(new RoadTrafficControl(road));
+		allRoadControls.Add(new RoadTrafficControl(road, trafficMath));
 	}
 
 	public RoadTrafficControl roadControlForRoad(Road road)

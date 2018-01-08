@@ -25,7 +25,7 @@ public class TrafficAdditionController : MonoBehaviour
 				Intersection intersection = intersectionManager.intersectionForGameObject(obj);
 				Road road = intersection.getConnectedRoads()[0];
 				AbstractCarPosition abstractPosition = new AbstractCarPosition(road, intersection, 0, 0);
-				AbstractCar car = new AbstractCar(abstractPosition, Instantiate(carPrefab, intersection.position, Quaternion.identity), intersectionTrafficMath);
+				AbstractCar car = new AbstractCar(abstractPosition, Instantiate(carPrefab, intersection.position, Quaternion.identity));
 				carTrafficManager.AddCar(car);
 				
 				

@@ -6,17 +6,14 @@ using UnityEngine;
 
 public class AbstractCar
 {
-    public AbstractCar(AbstractCarPosition position, GameObject carGameObject, 
-        IntersectionTrafficMath trafficMath)
+    public AbstractCar(AbstractCarPosition position, GameObject carGameObject)
     {
         this.position = position;
         this.carGameObject = carGameObject;
-        this.trafficMath = trafficMath;
     }
 
     public AbstractCarPosition position;
     public GameObject carGameObject;
-    private IntersectionTrafficMath trafficMath;
 
     public void updateCarPosition()
     {
@@ -64,21 +61,6 @@ public class AbstractCar
 
     }
 
-    // placeholder method to move the car foward
-    // TODO: Delete this
-    public void moveForwardMathOnly(float amount)
-    {
-        float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(position);
-        if (position.offset < stoppingDistance) 
-        {
-            position.offset += amount;
-            //we should not exceed the stopping distance
-            if (position.offset > stoppingDistance)
-            {
-                position.offset = stoppingDistance;
-            }
-        }
-        
-    }
+    
 }
 

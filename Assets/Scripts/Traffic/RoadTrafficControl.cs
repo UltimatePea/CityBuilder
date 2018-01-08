@@ -5,12 +5,15 @@ using UnityEngine;
 public class RoadTrafficControl
 {
 	private Road referenceRoad;
+    private IntersectionTrafficMath trafficMath;
 
 	private List<AbstractCar> cars = new List<AbstractCar>();
 
-	public RoadTrafficControl (Road road)
+	public RoadTrafficControl (Road road, 
+        IntersectionTrafficMath trafficMath)
 	{
 		this.referenceRoad = road;
+		this.trafficMath = trafficMath;
 	}
 
 	public void AddCar(AbstractCar car)
@@ -23,7 +26,17 @@ public class RoadTrafficControl
 	{
 		foreach (AbstractCar car in cars)
 		{
-			car.moveForwardMathOnly(Time.deltaTime * 5);
+			float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(car.position);
+			if (car.position.offset < stoppingDistance) 
+			{
+				car.position.offset += Time.deltaTime * 5;
+				//we should not exceed the stopping distance
+				if (car.position.offset > stoppingDistance)
+				{
+					car.position.offset = stoppingDistance;
+				}
+			}
+
 			car.updateCarPosition();
 		}
 		
