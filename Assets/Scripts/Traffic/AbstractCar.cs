@@ -6,7 +6,8 @@ using UnityEngine;
 
 public class AbstractCar
 {
-    public AbstractCar(AbstractCarPosition position, GameObject carGameObject, IntersectionTrafficMath trafficMath)
+    public AbstractCar(AbstractCarPosition position, GameObject carGameObject, 
+        IntersectionTrafficMath trafficMath)
     {
         this.position = position;
         this.carGameObject = carGameObject;
@@ -44,7 +45,7 @@ public class AbstractCar
 
         Vector3 facingDirection = roadTo - roadFrom;
 
-        Vector3 perpendicular = Quaternion.EulerAngles(0, 90, 0) * facingDirection.normalized;
+        Vector3 perpendicular = Quaternion.Euler(0, 90, 0) * facingDirection.normalized;
 
         int numberOfLanes = position.referenceRoad.GetNumberOfLanesInDirectionWithReferenceIntersection(position.referenceIntersection);
         float roadWidth = position.referenceRoad.GetRoadWidthWithReferenceIntersection(position.referenceIntersection);

@@ -28,6 +28,7 @@ public class TrafficAdditionController : MonoBehaviour
 				AbstractCar car = new AbstractCar(abstractPosition, Instantiate(carPrefab, intersection.position, Quaternion.identity), intersectionTrafficMath);
 				carTrafficManager.AddCar(car);
 				
+				
 			}
 		}
 

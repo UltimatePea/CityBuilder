@@ -13,4 +13,7 @@ public class IntersectionTrafficControl
 		this.referenceIntersection = intersection;
 	}
 
+	public void tick()
+	{
+	}
 }

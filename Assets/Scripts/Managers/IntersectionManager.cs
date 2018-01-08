@@ -7,7 +7,7 @@ public class IntersectionManager : MonoBehaviour
 {
 	
 	/* dependency */
-	public IntersectionTrafficManager trafficManager;
+	public CarTrafficManager trafficManager;
 
 	/* temporary */
 	private List<Intersection> temporaryIntersections = new List<Intersection> ();

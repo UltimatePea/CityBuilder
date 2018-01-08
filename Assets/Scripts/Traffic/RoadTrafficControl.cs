@@ -6,20 +6,26 @@ public class RoadTrafficControl
 {
 	private Road referenceRoad;
 
+	private List<AbstractCar> cars = new List<AbstractCar>();
+
 	public RoadTrafficControl (Road road)
 	{
 		this.referenceRoad = road;
 	}
 
-	// Use this for initialization
-	void Start ()
+	public void AddCar(AbstractCar car)
 	{
-		
+		cars.Add(car);
 	}
-	
-	// Update is called once per frame
-	void Update ()
+
+	// this method should be called once per frame to update car's positions
+	public void tick()
 	{
+		foreach (AbstractCar car in cars)
+		{
+			car.moveForwardMathOnly(Time.deltaTime * 5);
+			car.updateCarPosition();
+		}
 		
 	}
 }
