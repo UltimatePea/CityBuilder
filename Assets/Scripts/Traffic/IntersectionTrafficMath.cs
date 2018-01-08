@@ -48,4 +48,48 @@ public class IntersectionTrafficMath : MonoBehaviour
 
         return stoppingDistance;
     }
+
+    public float startingDistanceForCurrentDrive(AbstractCarPosition carPosition)
+    {
+        
+        /**
+         *
+         *  refIntersection                                     toIntersection
+         *
+         *  fromLeftEdge
+         *  \===================================================|   ^
+         *   \                                                  |  width(toIntersection)
+         *    \ ------------------------------------------------|   x
+         * <  >\                                                |  width(refIntersection)
+         *  |   \===============================================|   v
+         *  |  fromRightEdge
+         *  |
+         *  +--> startingDistance
+         * 
+         */
+
+        Intersection toIntersection = carPosition.referenceRoad.otherIntersection(carPosition.referenceIntersection);
+        Vector3 fromLeftEdge = builder.coordinateForRoadAtIntersection(carPosition.referenceIntersection, carPosition.referenceRoad, 
+                                  IntersectionBuilder.RightOrLeft.LEFT);
+        Vector3 fromRightEdge = builder.coordinateForRoadAtIntersection(carPosition.referenceIntersection, carPosition.referenceRoad,
+                                  IntersectionBuilder.RightOrLeft.RIGHT);
+        
+        // get the proportion
+        int totalNumberOfLanes =
+            carPosition.referenceRoad.GetNumberOfLanesInDirectionWithReferenceIntersection(toIntersection)
+            + carPosition.referenceRoad.GetNumberOfLanesInDirectionWithReferenceIntersection(carPosition
+                .referenceIntersection);
+
+        Vector3 startingLocation = Vector3.Lerp(fromLeftEdge, fromRightEdge,
+            1f / 2 + (1f / 2 + carPosition.laneNumber) / totalNumberOfLanes) * (1f/2);
+        
+        // project the stopping location onto the outgoing vector
+
+        Vector3 startignCompensation = Vector3.Project(startingLocation,
+            IntersectionMath.getOutgoingVector(carPosition.referenceIntersection, carPosition.referenceRoad));
+
+        float startingDistance =  startignCompensation.magnitude;
+
+        return startingDistance;
+    }
 }

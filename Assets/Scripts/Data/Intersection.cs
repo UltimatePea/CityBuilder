@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
@@ -133,7 +134,45 @@ public class Intersection
 			}
 		}
 	}
+	
+	
+	/** Convinience Delegation method **/
+	// TODO: Change all usage to use these methods instead of IntersectionBuilder's
 
+	public enum IntersectionGraphicsType { NONE, ONE_WAY_WRAP, TWO_WAY_TRANSITION, TWO_WAY_SKEW, TWO_WAY_SMOOTH, MULTI_WAY}
+
+	public IntersectionGraphicsType GetGraphicsType()
+	{
+		switch (builder.GetIntersectionType(this))
+		{
+			case IntersectionBuilder.IntersectionType.NONE:
+				return IntersectionGraphicsType.NONE;
+			case IntersectionBuilder.IntersectionType.ONE_WAY:
+				return IntersectionGraphicsType.ONE_WAY_WRAP;
+			case IntersectionBuilder.IntersectionType.TWO_WAY:
+				switch (builder.GetTwoWayIntersectionType(this))
+				{
+					case IntersectionBuilder.TwoWayIntersectionType.SKEW:
+						return IntersectionGraphicsType.TWO_WAY_SKEW;
+					case IntersectionBuilder.TwoWayIntersectionType.SMOOTH:
+						return IntersectionGraphicsType.TWO_WAY_SMOOTH;
+					case IntersectionBuilder.TwoWayIntersectionType.TRANSITION:
+						return IntersectionGraphicsType.TWO_WAY_TRANSITION;
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+				break;
+			case IntersectionBuilder.IntersectionType.MULTI_WAY:
+				return IntersectionGraphicsType.MULTI_WAY;
+			default:
+				throw new ArgumentOutOfRangeException();
+		}
+	}
+
+	public Vector3 ccoordinateForRoadEnds(Road road, IntersectionBuilder.RightOrLeft ltrt)
+	{
+		return builder.coordinateForRoadAtIntersection(this, road, ltrt);
+	}
 
 
 }

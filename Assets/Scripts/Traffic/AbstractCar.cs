@@ -20,7 +20,20 @@ public class AbstractCar
         
        // update the carGameObject's coordinate and orientation to be the correct one
 
-        
+
+        Vector3 objPosition;
+        Quaternion objRotation;
+        CalculatePositionAndOrientation(out objPosition, out objRotation);
+
+        carGameObject.transform.position = objPosition;
+        carGameObject.transform.rotation = objRotation;
+
+
+
+    }
+
+    public void CalculatePositionAndOrientation(out Vector3 objPosition, out Quaternion objRotation)
+    {
         /**
          *
          * from                                                     to
@@ -44,7 +57,8 @@ public class AbstractCar
 
         Vector3 perpendicular = Quaternion.Euler(0, 90, 0) * facingDirection.normalized;
 
-        int numberOfLanes = position.referenceRoad.GetNumberOfLanesInDirectionWithReferenceIntersection(position.referenceIntersection);
+        int numberOfLanes =
+            position.referenceRoad.GetNumberOfLanesInDirectionWithReferenceIntersection(position.referenceIntersection);
         float roadWidth = position.referenceRoad.GetRoadWidthWithReferenceIntersection(position.referenceIntersection);
 
         float laneWidth = roadWidth / numberOfLanes;
@@ -54,13 +68,8 @@ public class AbstractCar
 
         Vector3 horizontalOffset = facingDirection.normalized * position.offset;
 
-        carGameObject.transform.position = roadFrom + horizontalOffset + perpendicularOffset;
-        carGameObject.transform.rotation = Quaternion.FromToRotation(Vector3.right, facingDirection);
-
-
-
+        objPosition = roadFrom + horizontalOffset + perpendicularOffset;
+        objRotation = Quaternion.FromToRotation(Vector3.right, facingDirection);
     }
-
-    
 }
 
