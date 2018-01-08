@@ -36,6 +36,8 @@ public class IntersectionTrafficControl
 			if (carsAtThisIntersection.Count != 0) {
 				currentlyOperatingCar = carsAtThisIntersection [0];
 				carsAtThisIntersection.RemoveAt (0);
+				// remove the car from the road // TODO: Redesign the communication between road control and intersection control
+				trafficManager.roadControlForRoad(currentlyOperatingCar.position.referenceRoad).RemoveCarFromRoad(currentlyOperatingCar);
 				
 				
 				// calculate the final form after going through the intersection
@@ -81,6 +83,7 @@ public class IntersectionTrafficControl
 
 	
 
+	// this method add cars to the processing queue only, it does not do anything with the car i.e. changing position etc
 	public void AddCar (AbstractCar car)
 	{
 		this.carsAtThisIntersection.Add (car);
