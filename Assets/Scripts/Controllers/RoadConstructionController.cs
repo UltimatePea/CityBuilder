@@ -52,7 +52,7 @@ public class RoadConstructionController : MonoBehaviour
 					if (this.intersecManager.canConnectTwoIntersections (temporary, this.startIntersection, roadWidth)) {
 						// conditional check to prevent road length to be zero( thus a physics error)
 						// would not be a problem if we switched to sphere
-						this.intersecManager.connectTwoIntersections (temporary, this.startIntersection, roadWidth);
+						this.intersecManager.createTemporaryConnection (temporary, this.startIntersection, roadWidth);
 					} else {
 						// we could not create connection here, remove the temporary
 						this.intersecManager.removeTemporaryIntersectionIfThereIsAny ();

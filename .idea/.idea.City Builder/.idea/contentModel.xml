@@ -49,8 +49,9 @@
           <e p="Traffic" t="Include">
             <e p="AbstractCar.cs" t="Include" />
             <e p="AbstractCarPosition.cs" t="Include" />
-            <e p="IntersectionControl.cs" t="Include" />
+            <e p="IntersectionTrafficControl.cs" t="Include" />
             <e p="IntersectionTrafficMath.cs" t="Include" />
+            <e p="RoadTrafficControl.cs" t="Include" />
           </e>
           <e p="TrafficLightControl.cs" t="Include" />
           <e p="TruckControl.cs" t="Include" />

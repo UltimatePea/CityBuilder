@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntersectionControl
+public class IntersectionTrafficControl
 {
 
 
 	private Intersection referenceIntersection;
 	
-	public IntersectionControl(Intersection intersection)
+	public IntersectionTrafficControl(Intersection intersection)
 	{
 		this.referenceIntersection = intersection;
 	}

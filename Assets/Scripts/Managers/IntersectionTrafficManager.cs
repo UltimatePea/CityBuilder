@@ -7,17 +7,29 @@ public class IntersectionTrafficManager : MonoBehaviour
 
 
 	private List<Intersection> allIntersections = new List<Intersection>();
-	private List<IntersectionControl> allControls = new List<IntersectionControl>();
+	private List<Road> allRoads = new List<Road>();
+	private List<IntersectionTrafficControl> allIntersectionControls = new List<IntersectionTrafficControl>();
+	private List<RoadTrafficControl> allRoadControls = new List<RoadTrafficControl>();
 
 	public void addNewIntersection(Intersection intersection)
 	{
 		allIntersections.Add(intersection);
-		allControls.Add(new IntersectionControl(intersection));
+		allIntersectionControls.Add(new IntersectionTrafficControl(intersection));
 	}
 
-	public IntersectionControl intersectionControlForIntersection(Intersection intersection)
+	public IntersectionTrafficControl intersectionControlForIntersection(Intersection intersection)
 	{
-		return allControls[allIntersections.IndexOf(intersection)];
+		return allIntersectionControls[allIntersections.IndexOf(intersection)];
 	}
 
+	public void addNewRoad(Road road)
+	{
+		allRoads.Add(road);
+		allRoadControls.Add(new RoadTrafficControl(road));
+	}
+
+	public RoadTrafficControl roadControlForRoad(Road road)
+	{
+		return allRoadControls[allRoads.IndexOf(road)];
+	}
 }

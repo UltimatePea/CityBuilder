@@ -37,10 +37,11 @@ public class IntersectionManager : MonoBehaviour
 		temporaryIntersections.ForEach (inter => inter.position = position);
 	}
 
-	public void createTemporaryConnection (Intersection intersection1, Intersection intersection2, float roadWidth)
+	public void createTemporaryConnection (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
-		Road rd = connectTwoIntersections (intersection1, intersection2, roadWidth);
-		tempRoad = rd;
+		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection, roadWidth));
+		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
+		tempRoad = road;
 	}
 
 	public void removeTemporaryRoadIfThereIsAny ()
@@ -87,7 +88,9 @@ public class IntersectionManager : MonoBehaviour
 	public Road connectTwoIntersections (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
 		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection, roadWidth));
-		return fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
+		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
+		trafficManager.addNewRoad(road);
+		return road;
 	}
 
 	/* Mapping */
