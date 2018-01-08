@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TruckDriver : MonoBehaviour
+public class TruckControl : MonoBehaviour
 {
 
 	public Material redLightOnMat, redLightMediumMat, redLightOffMat, yellowLightOnMat, 

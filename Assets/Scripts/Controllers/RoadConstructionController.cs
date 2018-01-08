@@ -25,7 +25,7 @@ public class RoadConstructionController : MonoBehaviour
 	{
 		SetRoadWidth();
 		GameObject obj;
-		Vector3 position = getMousePositionOnPlane (out obj);
+		Vector3 position = MouseCollisionDetection.getMousePositionOnPlane (out obj);
 		if (Input.GetMouseButtonDown (0)) {
 
 			Debug.Log (obj.tag);
@@ -112,22 +112,6 @@ public class RoadConstructionController : MonoBehaviour
 
 	}
 
-	private Vector3 getMousePositionOnPlane (out GameObject tag)
-	{
 
-		// Drag initiated
-		Ray ray = Camera.main.ScreenPointToRay (Input.mousePosition);
-
-		RaycastHit hitInfo = new RaycastHit ();
-		if (Physics.Raycast (ray, out hitInfo, Mathf.Infinity, ~(1 << GlobalLayers.IgnoreRaycast))) {
-			Vector3 point = hitInfo.point;
-			tag = hitInfo.transform.gameObject;
-			return point;
-		}
-		tag = null;
-
-		// TODO :: HANDLE LOGIC WHEN NOT HIT
-		return Vector3.zero;
-	}
 
 }

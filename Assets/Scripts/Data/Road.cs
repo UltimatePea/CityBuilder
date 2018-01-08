@@ -93,4 +93,22 @@ public class Road
 		}
 		return null;
 	}
+
+	public int GetNumberOfLanesInDirectionWithReferenceIntersection(Intersection positionReferenceIntersection)
+	{
+		// TODO : Allow variadic lanes
+		return 2;
+	}
+
+	public float GetRoadWidthWithReferenceIntersection(Intersection positionReferenceIntersection)
+	{
+		// TODO: allow different road width for different direction
+		return roadWidth / 2;
+	}
+
+// return the distance between from and to intersections
+	public float GetRoadLength()
+	{
+		return (fromIntersection.position - toIntersection.position).magnitude;
+	}
 }

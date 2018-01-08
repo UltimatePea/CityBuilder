@@ -19,6 +19,7 @@
           </e>
         </e>
         <e p="Scripts" t="Include">
+          <e p="AbstractCar.cs" t="Include" />
           <e p="Builders" t="Include">
             <e p="IntersectionBuilder.cs" t="Include" />
             <e p="IntersectionCustomizationBuilder.cs" t="Include" />
@@ -27,22 +28,27 @@
           </e>
           <e p="Controllers" t="Include">
             <e p="GameModeController.cs" t="Include" />
+            <e p="MouseCollisionDetection.cs" t="Include" />
             <e p="RoadAdjustmentController.cs" t="Include" />
             <e p="RoadConstructionController.cs" t="Include" />
+            <e p="TrafficAdditionController.cs" t="Include" />
           </e>
           <e p="Data" t="Include">
             <e p="Intersection.cs" t="Include" />
             <e p="IntersectionCustomization.cs" t="Include" />
-            <e p="IntersectionManager.cs" t="Include" />
             <e p="Road.cs" t="Include" />
             <e p="RoadConfiguration.cs" t="Include" />
           </e>
           <e p="GlobalLayers.cs" t="Include" />
           <e p="GlobalTags.cs" t="Include" />
+          <e p="Managers" t="Include">
+            <e p="CarTrafficManager.cs" t="Include" />
+            <e p="IntersectionManager.cs" t="Include" />
+          </e>
           <e p="Math3d.cs" t="Include" />
+          <e p="TrafficLightControl.cs" t="Include" />
+          <e p="TruckControl.cs" t="Include" />
         </e>
-        <e p="TrafficLightControl.cs" t="Include" />
-        <e p="TruckDriver.cs" t="Include" />
       </e>
       <e p="City Builder.sln" t="IncludeFlat" />
       <e p="Library" t="ExcludeRecursive" />

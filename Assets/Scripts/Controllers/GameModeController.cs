@@ -9,7 +9,9 @@ public class GameModeController : MonoBehaviour
 	{
 		NOT_DEFINED,
 		ROAD_CONSTRUCTION,
-		ROAD_ADJUSTMENT}
+		ROAD_ADJUSTMENT,
+		TRAFFIC_ADDITION
+	}
 
 	;
 
@@ -44,6 +46,9 @@ public class GameModeController : MonoBehaviour
 			setGameMode (GameMode.ROAD_CONSTRUCTION);
 		} else if (Input.GetKeyDown (KeyCode.A)) {
 			setGameMode (GameMode.ROAD_ADJUSTMENT);
+		} else if (Input.GetKeyDown(KeyCode.Q))
+		{
+			setGameMode(GameMode.TRAFFIC_ADDITION);
 		}
 	}
 
@@ -74,6 +79,9 @@ public class GameModeController : MonoBehaviour
 			break;
 		case GameMode.ROAD_CONSTRUCTION:
 			this.currentActiveController = GetComponent<RoadConstructionController> ();
+			break;
+		case GameMode.TRAFFIC_ADDITION:
+			this.currentActiveController = GetComponent<TrafficAdditionController>();
 			break;
 		}
 
