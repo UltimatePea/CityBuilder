@@ -67,17 +67,15 @@ public class AbstractCar
     // TODO: Delete this
     public void moveForwardMathOnly(float amount)
     {
-        if (position.offset < trafficMath.stoppingDistanceForCurrentDrive(position))
+        float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(position);
+        if (position.offset < stoppingDistance) 
         {
             position.offset += amount;
-        }
-        else
-        {
-            position.offset = 0;
-            // turn around
-            // TODO: CHange to handle the car to the intersection
-            position.referenceIntersection = position.referenceRoad.otherIntersection(position.referenceIntersection);
-
+            //we should not exceed the stopping distance
+            if (position.offset > stoppingDistance)
+            {
+                position.offset = stoppingDistance;
+            }
         }
         
     }

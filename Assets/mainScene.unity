@@ -301,7 +301,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4779280325449588, guid: 5ae7156066bd642378242e051e31a994, type: 2}
       propertyPath: m_RootOrder
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5ae7156066bd642378242e051e31a994, type: 2}
@@ -316,6 +316,7 @@ GameObject:
   - component: {fileID: 600529197}
   - component: {fileID: 600529198}
   - component: {fileID: 600529199}
+  - component: {fileID: 600529200}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Manager
@@ -347,6 +348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48e7304171cb74b44bef0736c9eccf6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trafficManager: {fileID: 600529200}
 --- !u!114 &600529199
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,6 +358,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e053972a6bacc49689296298fce9fa7e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carSpeed: 5
+--- !u!114 &600529200
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 600529196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a4839d911b7c34c38be0c664c9aea927, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &664378855
@@ -438,6 +452,47 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 56.291004, y: 0, z: 0}
+--- !u!1 &919631420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 919631422}
+  - component: {fileID: 919631421}
+  m_Layer: 0
+  m_Name: Maths
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &919631421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 919631420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e45a35d8f7d24870aa3db0cd3e26b12d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  builder: {fileID: 1032594818}
+--- !u!4 &919631422
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 919631420}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1032594816
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,7 +604,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4392976133808916, guid: ec5c5132873144949a00f45b1cd35731, type: 2}
       propertyPath: m_RootOrder
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: ec5c5132873144949a00f45b1cd35731, type: 2}
@@ -565,6 +620,7 @@ GameObject:
   - component: {fileID: 2082548759}
   - component: {fileID: 2082548761}
   - component: {fileID: 2082548758}
+  - component: {fileID: 2082548762}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Controller
@@ -621,3 +677,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2546e0b4c61f143d2b24c1410e6f7d4e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2082548762
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2082548757}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 814b95332824948a0ac6eddff1691d3f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carPrefab: {fileID: 1080746339438730, guid: ec5c5132873144949a00f45b1cd35731, type: 2}
+  carTrafficManager: {fileID: 600529199}
+  intersectionManager: {fileID: 600529198}
+  intersectionTrafficMath: {fileID: 919631421}

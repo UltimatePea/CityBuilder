@@ -43,11 +43,13 @@
           <e p="Managers" t="Include">
             <e p="CarTrafficManager.cs" t="Include" />
             <e p="IntersectionManager.cs" t="Include" />
+            <e p="IntersectionTrafficManager.cs" t="Include" />
           </e>
           <e p="Math3d.cs" t="Include" />
           <e p="Traffic" t="Include">
             <e p="AbstractCar.cs" t="Include" />
             <e p="AbstractCarPosition.cs" t="Include" />
+            <e p="IntersectionControl.cs" t="Include" />
             <e p="IntersectionTrafficMath.cs" t="Include" />
           </e>
           <e p="TrafficLightControl.cs" t="Include" />

@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 public class IntersectionManager : MonoBehaviour
 {
+	
+	/* dependency */
+	public IntersectionTrafficManager trafficManager;
 
 	/* temporary */
 	private List<Intersection> temporaryIntersections = new List<Intersection> ();
@@ -61,6 +64,7 @@ public class IntersectionManager : MonoBehaviour
 		Intersection intersec = new Intersection (position, new IntersectionCustomization (isTemporary: false, 
 			trafficControlStyle: IntersectionCustomization.TrafficControlStyle.ALL_WAY_STOP_SIGN));
 		allInstances.Add (intersec);
+		trafficManager.addNewIntersection(intersec);
 		return intersec;
 	}
 
