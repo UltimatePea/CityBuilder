@@ -9,7 +9,6 @@ using System;
 
 public partial class IntersectionBuilder : MonoBehaviour
 {
-	private float MATH_3D_COMPENSATION = 100f;
 	// compensation for math3d line intersection algorithm
 	public GameObject fourWayIntersectionPrefab;
 	public GameObject oneWayIntersectionPrefab;
@@ -323,8 +322,8 @@ public partial class IntersectionBuilder : MonoBehaviour
                 Vector3 refPoint;
                 GameObject inner;
                 GameObject outer;
-                if (Math3d.LineLineIntersection(out refPoint, vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm,
-                    vec2 * MATH_3D_COMPENSATION))
+                if (Math3d.LineLineIntersection(out refPoint, vec1Norm, vec1 , vec2Norm,
+                    vec2 ))
                 {
                     // we intersected, its inner
                     inner = buildInner(vec1Norm, vec2Norm, refPoint, intersection.position, intersection.customization);
@@ -336,23 +335,7 @@ public partial class IntersectionBuilder : MonoBehaviour
                     outer = buildOuter(vec1Norm, vec2Norm, 4, intersection.position, intersection.customization);
                     // get the real intersection
                     // we need to * a const since the Math scirpt only considers line to be that long
-                    if (Math3d.LineLineIntersection(out refPoint, -vec1Norm, vec1 * MATH_3D_COMPENSATION, -vec2Norm,
-                            vec2 * MATH_3D_COMPENSATION) == false)
-                    {
-                        Debug.LogError("Error creating intersection, Lines do not intersect");
-                        // BUG: TODO: FIXIT
-                        // BEHAVIOR: two lines intersect on the upper right corner, with less than 45 deg angle between them
-                        /**	               
-                         *                 vvvvv Error Here
-                         * ------------------
-                         *                +
-                         *             +
-                         *         +
-                         *      +
-                         *   +
-                         * 
-                         */
-                    }
+                   
 
                     inner = buildInner(-vec1Norm, -vec2Norm, refPoint, intersection.position, intersection.customization);
 
@@ -683,18 +666,7 @@ public partial class IntersectionBuilder : MonoBehaviour
 		Vector3 vec1Norm = Quaternion.Euler(new Vector3(0, 90, 0)) * vec1 * rd1.roadWidth / 2;
 		Vector3 vec2Norm = Quaternion.Euler(new Vector3(0, -90, 0)) * vec2 * rd2.roadWidth / 2;
 
-		// TODO : 
-		bool res = Math3d.LineLineIntersection(out coordinateRes, vec1Norm, vec1 * MATH_3D_COMPENSATION, vec2Norm,
-			vec2 * MATH_3D_COMPENSATION);
-		if (res == false)
-		{
-			res = Math3d.LineLineIntersection(out coordinateRes, vec1Norm, -vec1 * MATH_3D_COMPENSATION, vec2Norm,
-				-vec2 * MATH_3D_COMPENSATION);
-			if (res == false)
-			{
-				Debug.LogWarning("Error when creating intersection: Line intersection does not exist");
-			}
-		}
+		bool res = Math3d.LineLineIntersection(out coordinateRes, vec1Norm, vec1 , vec2Norm, vec2 );
 
 		return coordinateRes;
 

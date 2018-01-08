@@ -165,13 +165,11 @@ public class Math3d : MonoBehaviour
 		//Note: sqrMagnitude does x*x+y*y+z*z on the input vector.
 		float s = Vector3.Dot (crossVec3and2, crossVec1and2) / crossVec1and2.sqrMagnitude;
         
-		if ((s >= 0.0f) && (s <= 1.0f)) {
             
-			intersection = linePoint1 + (lineVec1 * s);
-			return true;
-		} else {
-			return false;       
-		}
+		// UltimatePea's modification: we always assign the intersection, returning false if the 
+		// vectors do not intersect in their position direction
+        intersection = linePoint1 + (lineVec1 * s);
+        return s > 0.0f;
 	}
     
 	//Two non-parallel lines which may or may not touch each other have a point on each line which are closest
