@@ -6,19 +6,19 @@ This is a
 - [ ] Feature Request
 
 
-Describe the issue/feature you have:
+# Describe the issue/feature you have:
 
 
 
 
 
-Any Illustration / Screenshots?
+# Any Illustration / Screenshots?
 
 - [ ] Yes
 - [ ] No
 
 
-Priority
+# Priority
 
 - [ ] Urgent
 - [ ] Not Urgent
