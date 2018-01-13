@@ -2,8 +2,8 @@
 
 This is a 
 
-[ ] Bug Report
-[ ] Feature Request
+- [ ] Bug Report
+- [ ] Feature Request
 
 
 Describe the issue/feature you have:
@@ -14,12 +14,12 @@ Describe the issue/feature you have:
 
 Any Illustration / Screenshots?
 
-[ ] Yes
-[ ] No
+- [ ] Yes
+- [ ] No
 
 
 Priority
 
-[ ] Urgent
-[ ] Not Urgent
+- [ ] Urgent
+- [ ] Not Urgent
 
