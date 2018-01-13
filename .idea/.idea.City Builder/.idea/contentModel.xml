@@ -11,7 +11,6 @@
             <e p="GameControllerTest.cs" t="Include" />
           </e>
         </e>
-        <e p="MapGeneractionController.cs" t="Include" />
         <e p="Plugins" t="Include">
           <e p="Editor" t="Include">
             <e p="JetBrains" t="Include">
@@ -28,6 +27,7 @@
           </e>
           <e p="Controllers" t="Include">
             <e p="GameModeController.cs" t="Include" />
+            <e p="MapGeneractionController.cs" t="Include" />
             <e p="MouseCollisionDetection.cs" t="Include" />
             <e p="RoadAdjustmentController.cs" t="Include" />
             <e p="RoadConstructionController.cs" t="Include" />
