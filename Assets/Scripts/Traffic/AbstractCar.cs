@@ -10,11 +10,80 @@ public class AbstractCar
     {
         this.position = position;
         this.carGameObject = carGameObject;
+        this.carControl = carGameObject.GetComponent<TruckControl>();
+        this.speed = 0f;
     }
 
     public AbstractCarPosition position;
     public GameObject carGameObject;
+    
+    
+    private TruckControl carControl;
+    
+    
+    private float speed; // the current speed of the car
+    
+    /* speed related */
+    public float GetSpeed()
+    {
+        Debug.LogFormat("Speed = {0}", speed);
+        return speed;
+    }
 
+    public void IncreaseSpeed(float amount)
+    {
+        speed += amount * Time.deltaTime;
+        carControl.stopBreak();
+    }
+    
+    public void DecreaseSpeed(float amount)
+    {
+        speed -= amount * Time.deltaTime;
+        
+        // no negative speed
+        if (speed < 0)
+        {
+            speed = 0;
+            
+        }
+        carControl.startBreak();
+    }
+
+    public void SmartAdjustSpeedAccordingToStoppingDistance(float stoppingDistance, float maxAcceleration, float maxSpeed = Mathf.Infinity)
+    {
+        float safeDistance = stoppingDistance - GetSpeed();// subtract 1s from stopping distance
+        // check if we can stop at safe distance at maxDecceleration
+        // s = 1/2 a t^2                       vvv acceleration             vvv time
+        float stopDistaceAtFullBreak = 1 / 2f * maxAcceleration * Mathf.Pow(speed / maxAcceleration, 2f);
+        if (stopDistaceAtFullBreak < safeDistance)
+        {
+            // we still have safe distance, we accelerate
+            if (speed + maxAcceleration < maxSpeed)
+            {
+                // after full accelerate, we're still well below maxSpeed, we accelerate at full torque
+                IncreaseSpeed(maxAcceleration);
+            } else if (speed < maxSpeed)
+            {
+                // we are reaching maxSpeed, increase to maxSpeed
+                IncreaseSpeed(maxSpeed - speed);
+            }
+            else
+            {
+                // we keep the speed, no action
+            }
+            
+        }
+        else
+        {
+            // we are no longer safe, stopping distance is greater than safe distance
+            // full break
+            DecreaseSpeed(maxAcceleration);
+            
+        }
+    }
+    
+
+    /* Game Object related */
     public void updateCarPosition()
     {
         

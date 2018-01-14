@@ -66,11 +66,14 @@ public class RoadTrafficControl
 				float stoppingDistance = trafficMath.stoppingDistanceForCurrentDrive(car.position);
 				if (car.position.offset < stoppingDistance)
 				{
-					car.position.offset += Time.deltaTime * 5;
+					car.SmartAdjustSpeedAccordingToStoppingDistance(stoppingDistance - car.position.offset, 2f );
+					car.position.offset += car.GetSpeed() * Time.deltaTime;
 					//we should not exceed the stopping distance
-					if (car.position.offset > stoppingDistance)
+					// If the car is close enough to the intersection
+					if (stoppingDistance - car.position.offset < 0.05f)
 					{
 						car.position.offset = stoppingDistance;
+						car.DecreaseSpeed(100f);// force stop the car
 
 						moveCarToIntersection(car);
 					}
@@ -85,12 +88,8 @@ public class RoadTrafficControl
 				float stoppingDistance = sortedCars[j - 1].position.offset - MIN_DIST;
 				if (car.position.offset < stoppingDistance)
 				{
-					car.position.offset += Time.deltaTime * 5;
-					//we should not exceed the stopping distance
-					if (car.position.offset > stoppingDistance)
-					{
-						car.position.offset = stoppingDistance;
-					}
+					car.SmartAdjustSpeedAccordingToStoppingDistance(stoppingDistance - car.position.offset, 2f );
+					car.position.offset += car.GetSpeed() * Time.deltaTime;
 				}
 
 				car.updateCarPosition();
