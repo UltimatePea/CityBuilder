@@ -51,7 +51,8 @@ public class AbstractCar
 
     public void SmartAdjustSpeedAccordingToStoppingDistance(float stoppingDistance, float maxAcceleration, float maxSpeed = Mathf.Infinity)
     {
-        float safeDistance = stoppingDistance - GetSpeed();// subtract 1s from stopping distance
+//        float safeDistance = stoppingDistance - GetSpeed();// subtract 1s from stopping distance
+        float safeDistance = stoppingDistance;// experiment to see if this would solve the blinking break, fixes the blinking issue on straight roads
         // check if we can stop at safe distance at maxDecceleration
         // s = 1/2 a t^2                       vvv acceleration             vvv time
         float stopDistaceAtFullBreak = 1 / 2f * maxAcceleration * Mathf.Pow(speed / maxAcceleration, 2f);
