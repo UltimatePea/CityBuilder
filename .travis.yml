@@ -3,7 +3,7 @@ osx_image: xcode9.2
 
 before_install:
 - chmod a+x ./travis_scripts/install.sh
-- chmod a+x ./travis_scripts/build.sh
+- chmod a+x ./travis_scripts/build_unity.sh
 install:
 - ./travis_scripts/install.sh
 script:
