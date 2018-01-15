@@ -2,8 +2,8 @@ language: objective-c
 osx_image: xcode9.2
 
 before_install:
-- chmod a+x ./Scripts/install.sh
-- chmod a+x ./Scripts/build.sh
+- chmod a+x ./travis_scripts/install.sh
+- chmod a+x ./travis_scripts/build.sh
 install:
 - ./travis_scripts/install.sh
 script:
