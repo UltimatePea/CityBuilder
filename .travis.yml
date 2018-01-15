@@ -7,8 +7,8 @@ before_install:
 install:
 - ./travis_scripts/install.sh
 script:
-- ./travis_scripts/build.sh
-- doxygen
+- ./travis_scripts/build_unity.sh
+- ./travis_scripts/doxygen_docs.sh
 
 deploy:
   provider: pages
