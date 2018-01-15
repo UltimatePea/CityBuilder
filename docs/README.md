@@ -1,4 +1,4 @@
-# City Builder
+# City Builder [travisbuild](https://travis-ci.org/UltimatePea/CityBuilder.svg?branch=develop)
 
 City Builder is a mutli-stage project. Current work is to create a clone of Simcity 5.
 
