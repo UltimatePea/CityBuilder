@@ -40,7 +40,8 @@ public class IntersectionManager : MonoBehaviour
 	public void createTemporaryConnection (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
 		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection, roadWidth));
-		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
+		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth, isTemporary:true));
+		
 		tempRoad = road;
 	}
 
@@ -88,7 +89,7 @@ public class IntersectionManager : MonoBehaviour
 	public Road connectTwoIntersections (Intersection fromIntersection, Intersection toIntersection, float roadWidth)
 	{
 		Debug.Assert (canConnectTwoIntersections (fromIntersection, toIntersection, roadWidth));
-		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth));
+		Road road =  fromIntersection.connectToIntersection (toIntersection, new RoadConfiguration (roadWidth, isTemporary:false));
 		trafficManager.addNewRoad(road);
 		return road;
 	}
@@ -104,10 +105,27 @@ public class IntersectionManager : MonoBehaviour
 				return inter;
 			}
 		}
+		Debug.LogError("Unable to find intersection for game object");
 		return null;
 	}
 
 
-
+	/**
+	 * Return the road for corresponding to a given gameobject. The road should be one previously returned
+	 * by `connectTwoIntersection`.
+	 */
+	public Road roadForGameObject(GameObject gameObj)
+	{
+		foreach (Intersection inter in allInstances) {
+			foreach (Road rd in inter.getConnectedRoads())
+			{
+                if (rd.GetGameObject () == gameObj) {
+                    return rd;
+                }
+			}
+		}
+		Debug.LogError("Unable to find road for game object");
+		return null;	
+	}
 }
 

@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-
+using Object = UnityEngine.Object;
 
 
 /* Roads are attached to the from intersection */
@@ -12,36 +12,47 @@ public class Road
 	private RoadBuilder builder;
 	private GameObject gameObject;
 
-	private float roadWidth;
+	private RoadConfiguration config;
+
 
 	public float GetRoadWidth ()
 	{
-		return roadWidth;
+		return config.roadWidth;
 	}
 
 	public Road (Intersection fromIntersection, Intersection toIntersection, RoadConfiguration config)
 	{
 		this.fromIntersection = fromIntersection;
 		this.toIntersection = toIntersection;
-		this.roadWidth = config.roadWidth;
+		this.config = config;
 
 		fromIntersection.connectToRoad (this);
 		toIntersection.connectToRoad (this);
 
 		this.builder = GameObject.FindWithTag (GlobalTags.Builder).GetComponent<RoadBuilder> ();
 		this.gameObject = this.builder.BuildRoad (this);
-
+		if (config.isTemporary)
+		{
+			this.gameObject.layer = GlobalLayers.IgnoreRaycast;
+			this.gameObject.tag = GlobalTags.Untagged;
+		}
 
 	}
 
 	public void UpdateGameObject()
 	{
 		this.gameObject = this.builder.UpdateRoad (this, this.gameObject);
+		// we don't want physics on temporary roads
+		if (this.config.isTemporary)
+		{
+			this.gameObject.layer = GlobalLayers.IgnoreRaycast;
+			this.gameObject.tag = GlobalTags.Untagged;
+		}
 	}
 
 	public void UpdateGameObjectAndOtherIntersection (Intersection callingIntersection)
 	{
-		this.gameObject = this.builder.UpdateRoad (this, this.gameObject);
+		UpdateGameObject();
 		switch (typeOfIntersection (callingIntersection)) {
 		case IntersectionClass.FROM:
 			this.toIntersection.UpdateGameObjectAndAllConnectedRoadsExcept(this);
@@ -103,7 +114,7 @@ public class Road
 	public float GetRoadWidthWithReferenceIntersection(Intersection positionReferenceIntersection)
 	{
 		// TODO: allow different road width for different direction
-		return roadWidth / 2;
+		return config.roadWidth / 2;
 	}
 
 // return the distance between from and to intersections
@@ -111,4 +122,14 @@ public class Road
 	{
 		return (fromIntersection.position - toIntersection.position).magnitude;
 	}
+
+    /**
+     * Returns the game object associated with this road
+     */
+	public GameObject GetGameObject()
+	{
+		return gameObject;
+	}
+
+	
 }

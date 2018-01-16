@@ -102,6 +102,10 @@ public class RoadConstructionController : MonoBehaviour
 			} else if (obj.tag == GlobalTags.Intersection) {
 				endIntersection = intersecManager.intersectionForGameObject (obj);
 			}
+			else
+			{
+				Debug.LogError(obj.tag + " Encountered");
+			}
 			//Debug.LogFormat ("start = {0}, end = {1}", this.startIntersection, endIntersection);
 			intersecManager.removeTemporaryRoadIfThereIsAny ();
 			intersecManager.removeTemporaryIntersectionIfThereIsAny ();

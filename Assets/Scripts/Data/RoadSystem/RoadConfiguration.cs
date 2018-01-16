@@ -6,9 +6,11 @@ public class RoadConfiguration
 {
 
 	public float roadWidth;
+	public bool isTemporary;
 
-	public RoadConfiguration (float roadWidth)
+	public RoadConfiguration (float roadWidth, bool isTemporary)
 	{
 		this.roadWidth = roadWidth;
+		this.isTemporary = isTemporary;
 	}
 }

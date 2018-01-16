@@ -77,7 +77,12 @@ public class RoadBuilder : MonoBehaviour
 
 
 		MeshFilter objMeshFilter = obj.GetComponent<MeshFilter> ();
-		objMeshFilter.mesh = mesh;	
+		objMeshFilter.mesh = mesh;
+		
+		// temp solution for collision
+		MeshCollider objMeshCollider = obj.GetComponent<MeshCollider>();
+		objMeshCollider.sharedMesh = mesh;
+		
 
 		return obj;
 	}

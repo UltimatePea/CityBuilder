@@ -26,6 +26,7 @@
             <e p="RoadBuilder.cs" t="Include" />
           </e>
           <e p="Controllers" t="Include">
+            <e p="BuildingAdditionController.cs" t="Include" />
             <e p="GameModeController.cs" t="Include" />
             <e p="MapGeneractionController.cs" t="Include" />
             <e p="MouseCollisionDetection.cs" t="Include" />
@@ -34,26 +35,30 @@
             <e p="TrafficAdditionController.cs" t="Include" />
           </e>
           <e p="Data" t="Include">
-            <e p="Intersection.cs" t="Include" />
-            <e p="IntersectionCustomization.cs" t="Include" />
-            <e p="Road.cs" t="Include" />
-            <e p="RoadConfiguration.cs" t="Include" />
+            <e p="AbstractBuilding.cs" t="Include" />
+            <e p="RoadSystem" t="Include">
+              <e p="Intersection.cs" t="Include" />
+              <e p="IntersectionCustomization.cs" t="Include" />
+              <e p="Road.cs" t="Include" />
+              <e p="RoadConfiguration.cs" t="Include" />
+            </e>
+            <e p="Traffic" t="Include">
+              <e p="AbstractCar.cs" t="Include" />
+              <e p="AbstractCarPosition.cs" t="Include" />
+              <e p="IntersectionTrafficControl.cs" t="Include" />
+              <e p="IntersectionTrafficMath.cs" t="Include" />
+              <e p="RoadTrafficControl.cs" t="Include" />
+            </e>
           </e>
           <e p="GlobalLayers.cs" t="Include" />
           <e p="GlobalTags.cs" t="Include" />
           <e p="Managers" t="Include">
+            <e p="BuildingManager.cs" t="Include" />
             <e p="CarTrafficManager.cs" t="Include" />
             <e p="IntersectionManager.cs" t="Include" />
             <e p="NavigationManager.cs" t="Include" />
           </e>
           <e p="Math3d.cs" t="Include" />
-          <e p="Traffic" t="Include">
-            <e p="AbstractCar.cs" t="Include" />
-            <e p="AbstractCarPosition.cs" t="Include" />
-            <e p="IntersectionTrafficControl.cs" t="Include" />
-            <e p="IntersectionTrafficMath.cs" t="Include" />
-            <e p="RoadTrafficControl.cs" t="Include" />
-          </e>
           <e p="TrafficLightControl.cs" t="Include" />
           <e p="TruckControl.cs" t="Include" />
         </e>

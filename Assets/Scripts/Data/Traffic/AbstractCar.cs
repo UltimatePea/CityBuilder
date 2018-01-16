@@ -26,7 +26,7 @@ public class AbstractCar
     /* speed related */
     public float GetSpeed()
     {
-        Debug.LogFormat("Speed = {0}", speed);
+        //Debug.LogFormat("Speed = {0}", speed);
         return speed;
     }
 
