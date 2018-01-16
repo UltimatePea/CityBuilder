@@ -275,6 +275,7 @@ GameObject:
   - component: {fileID: 600529198}
   - component: {fileID: 600529199}
   - component: {fileID: 600529200}
+  - component: {fileID: 600529201}
   m_Layer: 0
   m_Name: Managers
   m_TagString: Manager
@@ -330,6 +331,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 90baaf666413432e8b49147e1a4bf623, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &600529201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 600529196}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 03fac73896a1747e6a410e0eeb26526c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &664378855
@@ -540,6 +552,7 @@ GameObject:
   - component: {fileID: 2082548758}
   - component: {fileID: 2082548762}
   - component: {fileID: 2082548763}
+  - component: {fileID: 2082548764}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Controller
@@ -626,3 +639,18 @@ MonoBehaviour:
   intersecManager: {fileID: 600529198}
   CarTrafficManager: {fileID: 0}
   shouldStartOnPlay: 1
+--- !u!114 &2082548764
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2082548757}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c305321469394b1898ccec9202ba1b8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  intersectionManager: {fileID: 600529198}
+  buildingManager: {fileID: 600529201}
+  buildingPrefab: {fileID: 1700060615239528, guid: cd54b28750a9d4ee5a9e69279737b989,
+    type: 2}

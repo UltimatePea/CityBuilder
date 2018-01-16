@@ -9,6 +9,7 @@ TagManager:
   - Intersection
   - Ground
   - Manager
+  - Road
   layers:
   - Default
   - TransparentFX
