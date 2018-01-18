@@ -7,7 +7,7 @@ before_install:
 install:
 - ./travis_scripts/install.sh
 script:
-- ./travis_scripts/build_unity.sh
+- travis_wait 60 ./travis_scripts/build_unity.sh
 - ./travis_scripts/doxygen_docs.sh
 
 deploy:
