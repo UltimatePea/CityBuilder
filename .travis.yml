@@ -5,7 +5,7 @@ before_install:
 - chmod a+x ./travis_scripts/install.sh
 - chmod a+x ./travis_scripts/build_unity.sh
 install:
-- ./travis_scripts/install.sh
+- travis_wait ./travis_scripts/install.sh
 script:
 - travis_wait 60 ./travis_scripts/build_unity.sh
 - ./travis_scripts/doxygen_docs.sh
