@@ -4,7 +4,7 @@ City Builder is a mutli-stage project. Current work is to create a clone of Simc
 
 # Developer Docs
 
-[Please see here](https://ultimatepea.github.io/CityBuilder/)
+[Please see here](developer_docs/home.md)
 
 # User Docs
 
