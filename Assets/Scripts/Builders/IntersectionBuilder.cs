@@ -6,17 +6,63 @@ using System;
 
 
 
-
-public partial class IntersectionBuilder : MonoBehaviour
+/**
+ * @brief Graphics class for painting intersection
+ *
+ * This class is the main class for providing graphics for an intersection itself. This class extends `MonoBehaviour`
+ * so any MonoBehaviour may access this class via Dependency Injection. For abstract class access, they may ask the
+ * monobehavior to create this class for them.
+ * 
+ */
+public class IntersectionBuilder : MonoBehaviour
 {
 	// compensation for math3d line intersection algorithm
+	/**
+	 * @brief The prefab for a four-way intersection.
+	 *
+	 * The prefab's texture and rendering is used for any multiway intersections.
+	 */
 	public GameObject fourWayIntersectionPrefab;
+	/**
+	 * @brief The prefab for a one-way intersection.
+	 *
+	 * The prefab is used at both ends of a road where there's not connecting roads.
+	 */
 	public GameObject oneWayIntersectionPrefab;
 
+	/**
+	 * @brief Dependency on another builder
+	 *
+	 * The customization builder builds such things as traffic lights, stop signs etc.
+	 */
 	public IntersectionCustomizationBuilder customizationBuilder;
 	
-	public enum IntersectionType { NONE, ONE_WAY, TWO_WAY, MULTI_WAY}
+	/**
+	 * @brief Type of the intersection
+	 *
+	 * This type is solely based on the number of roads that this intersection is connected to.
+	 * For a detailed look, you might want to use `GetTwoWayIntersectionType()` to query the exact
+	 * look when this method returns `TWO_WAY`.
+	 */
+	public enum IntersectionType
+	{
+		/** The intersection currently connects to no way */
+		NONE,  
+		/** The intersection connects to one road. */
+		ONE_WAY,  
+		/** This intersection connets to two roads. */
+		TWO_WAY,  
+		/** This intersection connects to three or more roads */
+		MULTI_WAY, 
+	}
 
+	/**
+	 * @brief retrive the type of an intersection
+	 *
+	 * This method determines the type of an itnersection by looking at the number of connections it has to its roads.
+	 *
+	 * @param intersection the intersection to inspect type
+	 */
 	public IntersectionType GetIntersectionType(Intersection intersection)
 	{
 		Road[] roads = intersection.getConnectedRoads ();
@@ -41,26 +87,29 @@ public partial class IntersectionBuilder : MonoBehaviour
 
 
 	
+	
+	public enum RightOrLeft { RIGHT, LEFT }
 	/**
-	 * Returns the coordinate for the left edge and right edge of the road.
+	 * @brief Returns the coordinate for the left edge and right edge of the road.
 	 *
 	 *
 	 * The behavior is undefined when road is not attached to the intersection.
-	 * TODO: Throw an exception if this is the case (exp one way)
 	 *
 	 *
 	 * Right or left is regarding the direction going out from intersection
 	 * 
 	 *
-	 * rtlt: Right : the point on the right of the outgoing vector
-	 * 		 Left : the point on the left of the outgoing vector
-	 * 		Note: This direction is the reverse of what traditionally known as left or right
+	 * @param intersection the subject intersection
+	 * @param road which road to test
+	 * @param rtlt: Right : the point on the right of the outgoing vector <br>
+	 * 		 		Left : the point on the left of the outgoing vector <br>
+	 * 				Note: This direction is the reverse of what traditionally known as left or right
 	 * 
 	 */
-	public enum RightOrLeft { RIGHT, LEFT }
 	public Vector3 coordinateForRoadAtIntersection (Intersection intersection, Road road, RightOrLeft rtlt)
 	{
 		Road[] roads = intersection.getConnectedRoads ();
+		Debug.Assert(roads.Contains(road));
 		// no intersection if no roads
 		switch (GetIntersectionType(intersection))
 		{
@@ -157,8 +206,17 @@ public partial class IntersectionBuilder : MonoBehaviour
 	 * Intersection Building
 	 ************************************************/
 
-	// this method will not change intersectionObject and returns an updated game object
-	// intersectionObject must be the one returned by a previous call to BuildIntersection
+	/** @brief update the game object associated with an intersection
+	 * 
+	 *  This method will not change intersectionObject. This method returns an updated game object, which the caller
+	 * needs to manage the value. This method destroys the incoming intersectionObject parameter
+	 *
+	 * @param intersection the subject
+	 *  @param intersectionObject the gameObject returned by a previous call to BuildIntersection
+	 *
+	 * @return the new built gameObject
+	 * 
+	 */
 	public GameObject UpdateIntersection (Intersection intersection, GameObject intersectionObject)
 	{
 		Destroy (intersectionObject);
@@ -166,7 +224,12 @@ public partial class IntersectionBuilder : MonoBehaviour
 		return newIntersection;
 	}
 
-	// build a single intersection, returns the created game object
+	/**
+	 * 
+	 * calculate graphics for a single intersection,
+	 *
+	 * @return the created game object
+	 */
 	public GameObject BuildIntersection (Intersection intersection)
 	{
 		GameObject baseObj =  BuildBaseTerrain(intersection);
@@ -234,11 +297,30 @@ public partial class IntersectionBuilder : MonoBehaviour
 		return IntersectionMath.getOutgoingVector (intersection, connectedRoad).normalized * roadEndWidth / 2;
 	}
 	
-	public enum TwoWayIntersectionType { SKEW /* Sharop turn */ , SMOOTH /* Change road width */, 
-		TRANSITION /* just a curvature */}
+	/**
+	 * @brief The graphics type for a two way intersection.
+	 *
+	 * The two way intersection might be displayed in three ways.
+	 */
+	public enum TwoWayIntersectionType { 
+		/** Sharp turn, a four-way intersection is used*/
+		SKEW  , 
+		/** A curvature in the road */
+		SMOOTH , 
+		/** There's a change in road width.  */
+		TRANSITION 
+	}
 
+	
+	/**
+	 * @brief the detailed type for a two-way intersection
+	 *
+	 * @param intersection the intersection to inspect type
+	 * 
+	 */
 	public TwoWayIntersectionType GetTwoWayIntersectionType(Intersection intersection)
 	{
+		Debug.Assert(intersection.getConnectedRoads().Length == 2);
 		Road road1 = intersection.getConnectedRoads()[0];
 		Road road2 = intersection.getConnectedRoads()[1];
 		
