@@ -1,15 +1,26 @@
-language: objective-c
-osx_image: xcode9.2
+# Use from https://gist.github.com/vidavidorra/548ffbcdae99d752da02
 
-before_install:
-- chmod a+x ./travis_scripts/install.sh
-- chmod a+x ./travis_scripts/build_unity.sh
-install:
-- travis_wait ./travis_scripts/install.sh
+
+# Install dependencies
+addons:
+  apt:
+    packages:
+      - doxygen
+      - doxygen-doc
+      - doxygen-latex
+      - doxygen-gui
+      - graphviz
+      
+# Build your code e.g. by calling make
 script:
-- travis_wait 60 ./travis_scripts/build_unity.sh
-- ./travis_scripts/doxygen_docs.sh
-
+  - doxygen
+  
+# Blacklist
+branches:
+  except:
+    - gh-pages
+    
+    
 deploy:
   provider: pages
   skip-cleanup: true
