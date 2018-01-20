@@ -1,0 +1,7 @@
+<map id="IntersectionManager" name="IntersectionManager">
+<area shape="rect" id="node3" href="$class_car_traffic_manager.html" title="CarTrafficManager" alt="" coords="79,291,208,317"/>
+<area shape="rect" id="node4" href="$class_navigation_manager.html" title="NavigationManager" alt="" coords="123,133,257,160"/>
+<area shape="rect" id="node5" href="$class_intersection_traffic_math.html" title="IntersectionTrafficMath" alt="" coords="287,192,443,219"/>
+<area shape="rect" id="node6" href="$class_intersection_builder.html" title="Graphics class for painting intersection. " alt="" coords="336,83,465,109"/>
+<area shape="rect" id="node7" href="$class_intersection_customization_builder.html" title="IntersectionCustomization\lBuilder" alt="" coords="467,185,641,226"/>
+</map>

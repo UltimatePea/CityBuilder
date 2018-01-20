@@ -1,0 +1,4 @@
+<map id="AbstractCar.updateCarPosition" name="AbstractCar.updateCarPosition">
+<area shape="rect" id="node2" href="$class_abstract_car.html#abba39b4bbc059e8fe35bd31b7f8e5978" title="AbstractCar.CalculatePosition\lAndOrientation" alt="" coords="257,5,455,46"/>
+<area shape="rect" id="node3" href="$class_road.html#ad85e52384adda1722fa76ccd3e41515d" title="Road.GetNumberOfLanesInDirection\lWithReferenceIntersection" alt="" coords="505,5,741,46"/>
+</map>

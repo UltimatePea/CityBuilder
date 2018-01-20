@@ -1,0 +1,4 @@
+<map id="Intersection.getConnectedRoads" name="Intersection.getConnectedRoads">
+<area shape="rect" id="node2" href="$class_intersection.html#afa46986363528193bdcd03f8097ed4bc" title="Intersection.UpdateGameObject\lAndAllConnectedRoadsExcept" alt="" coords="234,5,443,46"/>
+<area shape="rect" id="node3" href="$class_navigation_manager.html#a41d9b60be7cf1ca05a9cc50ed663fe2a" title="NavigationManager.target\lWayForAbstractCarAtIntersection" alt="" coords="229,70,448,111"/>
+</map>

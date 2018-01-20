@@ -1,0 +1,4 @@
+<map id="IntersectionBuilder.coordinateForRoadAtIntersection" name="IntersectionBuilder.coordinateForRoadAtIntersection">
+<area shape="rect" id="node2" href="$class_road_builder.html#afd7f0b166f5b1b869b954d51c4347810" title="RoadBuilder.BuildRoad" alt="" coords="248,12,405,39"/>
+<area shape="rect" id="node3" href="$class_road_builder.html#a6807b405505b2f501a3079cceaf80543" title="RoadBuilder.UpdateRoad" alt="" coords="453,12,624,39"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Intersection.GetGraphicsType" name="Intersection.GetGraphicsType">
+<area shape="rect" id="node2" href="$class_intersection_builder.html#a400adb66aa94c8eeee1025e1ea637183" title="retrive the type of an intersection " alt="" coords="251,5,503,32"/>
+<area shape="rect" id="node3" href="$class_intersection_builder.html#a1b047226db2a6b9c95d56ad70a66ecad" title="the detailed type for a two&#45;way intersection " alt="" coords="287,57,467,98"/>
+<area shape="rect" id="node4" href="$class_road.html#a35bc174b1964b05a876121b9ce8dc1ef" title="Road.GetRoadWidth" alt="" coords="553,64,695,91"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Math3d.ClosestPointsOnTwoLines" name="Math3d.ClosestPointsOnTwoLines">
+<area shape="rect" id="node2" href="$class_math3d.html#a6add412d1291d4c5d42ecc30cc94fead" title="Math3d.PlaneFrom3Points" alt="" coords="272,5,448,32"/>
+<area shape="rect" id="node3" href="$class_math3d.html#a570ef4340ba12690009750e6aa108c2e" title="Math3d.AreLineSegmentsCrossing" alt="" coords="248,56,472,83"/>
+<area shape="rect" id="node4" href="$class_math3d.html#aab30a916c1ea2d67adb58be1f2c87050" title="Math3d.IsLineInRectangle" alt="" coords="521,56,695,83"/>
+</map>

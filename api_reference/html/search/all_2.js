@@ -1,0 +1,21 @@
+var searchData=
+[
+  ['calculatepositionandorientation',['CalculatePositionAndOrientation',['../class_abstract_car.html#abba39b4bbc059e8fe35bd31b7f8e5978',1,'AbstractCar']]],
+  ['canconnecttwointersections',['canConnectTwoIntersections',['../class_intersection_manager.html#a9d79e0711e98974f1d9b4838e679dfbf',1,'IntersectionManager']]],
+  ['cargameobject',['carGameObject',['../class_abstract_car.html#a805fa3fe87fed92d91dc1470ef2479ad',1,'AbstractCar']]],
+  ['carprefab',['carPrefab',['../class_traffic_addition_controller.html#aaa2b73d055c519e62c446de6acedf5a4',1,'TrafficAdditionController']]],
+  ['carspeed',['carSpeed',['../class_car_traffic_manager.html#a6a38f5918393e2c82ec23e936b860be9',1,'CarTrafficManager']]],
+  ['cartrafficmanager',['CarTrafficManager',['../class_car_traffic_manager.html',1,'CarTrafficManager'],['../class_map_generaction_controller.html#ae213919b5811ce19d205354c87e36a0f',1,'MapGeneractionController.CarTrafficManager()'],['../class_traffic_addition_controller.html#a6625c385f3367262753d1d0599c1b6d0',1,'TrafficAdditionController.carTrafficManager()']]],
+  ['cartrafficmanager_2ecs',['CarTrafficManager.cs',['../_car_traffic_manager_8cs.html',1,'']]],
+  ['ccoordinateforroadends',['ccoordinateForRoadEnds',['../class_intersection.html#ae7cc58c4f1c8183ff962c6b03bfee11b',1,'Intersection']]],
+  ['closestpointsontwolines',['ClosestPointsOnTwoLines',['../class_math3d.html#ade28da4490d6bb9e960ee19069a1f49f',1,'Math3d']]],
+  ['connecttointersection',['connectToIntersection',['../class_intersection.html#aae3c4bdf01fcba851c79787938aea49e',1,'Intersection']]],
+  ['connecttoroad',['connectToRoad',['../class_intersection.html#a3abc2472c9769432b40da82d06dc8691',1,'Intersection']]],
+  ['connecttwointersections',['connectTwoIntersections',['../class_intersection_manager.html#abeb7011cd8ecd11d655c8f82b74ed413',1,'IntersectionManager']]],
+  ['coordinateforroadatintersection',['coordinateForRoadAtIntersection',['../class_intersection_builder.html#a26791ceacdc7c0fcee60f170aeca6119',1,'IntersectionBuilder']]],
+  ['createintersection',['createIntersection',['../class_intersection_manager.html#a39b24a608d4dace42c2e0e69c4bb5035',1,'IntersectionManager']]],
+  ['createtemporaryconnection',['createTemporaryConnection',['../class_intersection_manager.html#ae34b07bdaf9fd0b1dda98cdb0994792b',1,'IntersectionManager']]],
+  ['createtemporaryintersection',['createTemporaryIntersection',['../class_intersection_manager.html#a2edf325d992bbc9b4be3b2894ff79a2c',1,'IntersectionManager']]],
+  ['customization',['customization',['../class_intersection.html#a88d3fd2a291c19665f708f8fa6ef8e0a',1,'Intersection']]],
+  ['customizationbuilder',['customizationBuilder',['../class_intersection_builder.html#ad52d9b673785ee26099f5b346fbd3f3f',1,'IntersectionBuilder']]]
+];

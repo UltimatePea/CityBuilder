@@ -1,0 +1,6 @@
+<map id="Road.GetNumberOfLanesInDirectionWithReferenceIntersection" name="Road.GetNumberOfLanesInDirectionWithReferenceIntersection">
+<area shape="rect" id="node2" href="$class_abstract_car.html#abba39b4bbc059e8fe35bd31b7f8e5978" title="AbstractCar.CalculatePosition\lAndOrientation" alt="" coords="297,5,495,46"/>
+<area shape="rect" id="node4" href="$class_intersection_traffic_math.html#add3185dedff3360112b966927a019d43" title="IntersectionTrafficMath.stopping\lDistanceForCurrentDrive" alt="" coords="291,70,501,111"/>
+<area shape="rect" id="node5" href="$class_intersection_traffic_math.html#afff2a1dce09d384a39aa612d5dc00171" title="IntersectionTrafficMath.starting\lDistanceForCurrentDrive" alt="" coords="295,135,497,177"/>
+<area shape="rect" id="node3" href="$class_abstract_car.html#ae48cb5e247d37ee653b3b2d4e8ce2c8c" title="AbstractCar.updateCarPosition" alt="" coords="549,12,752,39"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="AbstractCar.SmartAdjustSpeedAccordingToStoppingDistance" name="AbstractCar.SmartAdjustSpeedAccordingToStoppingDistance">
+<area shape="rect" id="node2" href="$class_abstract_car.html#a8100b842e803e5c364dbdd37e3542d33" title="AbstractCar.IncreaseSpeed" alt="" coords="262,5,445,32"/>
+<area shape="rect" id="node3" href="$class_abstract_car.html#a11f5b258599caece575ff02fffb69e2f" title="AbstractCar.DecreaseSpeed" alt="" coords="259,56,448,83"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="Road.GetRoadWidth" name="Road.GetRoadWidth">
+<area shape="rect" id="node2" href="$class_intersection_builder.html#a1b047226db2a6b9c95d56ad70a66ecad" title="the detailed type for a two&#45;way intersection " alt="" coords="198,5,378,46"/>
+<area shape="rect" id="node3" href="$class_intersection.html#ab1e72b09dd3cab42ec51a595b7f22356" title="Intersection.GetGraphicsType" alt="" coords="427,12,623,39"/>
+<area shape="rect" id="node4" href="$class_navigation_manager.html#a41d9b60be7cf1ca05a9cc50ed663fe2a" title="NavigationManager.target\lWayForAbstractCarAtIntersection" alt="" coords="672,5,891,46"/>
+</map>

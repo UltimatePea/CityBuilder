@@ -1,0 +1,5 @@
+<map id="IntersectionManager.canConnectTwoIntersections" name="IntersectionManager.canConnectTwoIntersections">
+<area shape="rect" id="node2" href="$class_intersection.html#a5c3a5a0cbdec40c7555ba44ebc2dec9a" title="Intersection.IsDirectlyConnectedTo" alt="" coords="270,12,498,39"/>
+<area shape="rect" id="node3" href="$class_road.html#aaa6752791774d5b9980234773d902e68" title="Road.otherIntersection" alt="" coords="547,12,701,39"/>
+<area shape="rect" id="node4" href="$class_road.html#ae13e9b6fce7f973f543130a04a780449" title="Road.typeOfIntersection" alt="" coords="750,12,914,39"/>
+</map>

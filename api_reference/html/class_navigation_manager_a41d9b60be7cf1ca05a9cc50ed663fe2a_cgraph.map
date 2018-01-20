@@ -1,0 +1,7 @@
+<map id="NavigationManager.targetWayForAbstractCarAtIntersection" name="NavigationManager.targetWayForAbstractCarAtIntersection">
+<area shape="rect" id="node2" href="$class_intersection.html#ab1e72b09dd3cab42ec51a595b7f22356" title="Intersection.GetGraphicsType" alt="" coords="273,35,469,61"/>
+<area shape="rect" id="node6" href="$class_intersection.html#aae709adc42474e09988866f139814c7b" title="Intersection.getConnected\lRoads" alt="" coords="283,86,458,127"/>
+<area shape="rect" id="node3" href="$class_intersection_builder.html#a400adb66aa94c8eeee1025e1ea637183" title="retrive the type of an intersection " alt="" coords="518,5,770,32"/>
+<area shape="rect" id="node4" href="$class_intersection_builder.html#a1b047226db2a6b9c95d56ad70a66ecad" title="the detailed type for a two&#45;way intersection " alt="" coords="554,57,734,98"/>
+<area shape="rect" id="node5" href="$class_road.html#a35bc174b1964b05a876121b9ce8dc1ef" title="Road.GetRoadWidth" alt="" coords="819,64,962,91"/>
+</map>

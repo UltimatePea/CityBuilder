@@ -1,0 +1,4 @@
+<map id="Intersection.IsDirectlyConnectedTo" name="Intersection.IsDirectlyConnectedTo">
+<area shape="rect" id="node2" href="$class_road.html#aaa6752791774d5b9980234773d902e68" title="Road.otherIntersection" alt="" coords="283,5,437,32"/>
+<area shape="rect" id="node3" href="$class_road.html#ae13e9b6fce7f973f543130a04a780449" title="Road.typeOfIntersection" alt="" coords="486,5,650,32"/>
+</map>

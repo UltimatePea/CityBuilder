@@ -1,0 +1,4 @@
+<map id="RoadBuilder.BuildRoad" name="RoadBuilder.BuildRoad">
+<area shape="rect" id="node2" href="$class_intersection_builder.html#a26791ceacdc7c0fcee60f170aeca6119" title="Returns the coordinate for the left edge and right edge of the road. " alt="" coords="211,5,405,46"/>
+<area shape="rect" id="node3" href="$class_intersection_builder.html#a400adb66aa94c8eeee1025e1ea637183" title="retrive the type of an intersection " alt="" coords="454,12,706,39"/>
+</map>

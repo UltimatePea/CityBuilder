@@ -1,0 +1,6 @@
+<map id="IntersectionManager.createTemporaryConnection" name="IntersectionManager.createTemporaryConnection">
+<area shape="rect" id="node2" href="$class_intersection_manager.html#a9d79e0711e98974f1d9b4838e679dfbf" title="IntersectionManager.canConnect\lTwoIntersections" alt="" coords="235,5,450,46"/>
+<area shape="rect" id="node3" href="$class_intersection.html#a5c3a5a0cbdec40c7555ba44ebc2dec9a" title="Intersection.IsDirectlyConnectedTo" alt="" coords="499,12,727,39"/>
+<area shape="rect" id="node4" href="$class_road.html#aaa6752791774d5b9980234773d902e68" title="Road.otherIntersection" alt="" coords="776,12,931,39"/>
+<area shape="rect" id="node5" href="$class_road.html#ae13e9b6fce7f973f543130a04a780449" title="Road.typeOfIntersection" alt="" coords="979,12,1143,39"/>
+</map>

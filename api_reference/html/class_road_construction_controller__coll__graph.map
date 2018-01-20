@@ -1,0 +1,8 @@
+<map id="RoadConstructionController" name="RoadConstructionController">
+<area shape="rect" id="node3" href="$class_intersection_manager.html" title="IntersectionManager" alt="" coords="97,381,236,408"/>
+<area shape="rect" id="node4" href="$class_car_traffic_manager.html" title="CarTrafficManager" alt="" coords="151,291,280,317"/>
+<area shape="rect" id="node5" href="$class_navigation_manager.html" title="NavigationManager" alt="" coords="181,133,315,160"/>
+<area shape="rect" id="node6" href="$class_intersection_traffic_math.html" title="IntersectionTrafficMath" alt="" coords="359,192,515,219"/>
+<area shape="rect" id="node7" href="$class_intersection_builder.html" title="Graphics class for painting intersection. " alt="" coords="404,83,533,109"/>
+<area shape="rect" id="node8" href="$class_intersection_customization_builder.html" title="IntersectionCustomization\lBuilder" alt="" coords="539,185,713,226"/>
+</map>

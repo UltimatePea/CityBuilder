@@ -1,0 +1,11 @@
+<map id="Road.typeOfIntersection" name="Road.typeOfIntersection">
+<area shape="rect" id="node2" href="$class_intersection_math.html#a2af1a2c184b2528aa47692efb7bad87f" title="IntersectionMath.getOutgoing\lVector" alt="" coords="234,5,427,46"/>
+<area shape="rect" id="node3" href="$class_intersection_math.html#acaa6fa9fe38dd963b5d5be9555d8a74a" title="IntersectionMath.getAngle" alt="" coords="243,71,418,97"/>
+<area shape="rect" id="node4" href="$class_intersection.html#ab8ebe75d75ab7b68c5db6fceac249316" title="Intersection.RemoveConnectionTo" alt="" coords="219,121,443,148"/>
+<area shape="rect" id="node5" href="$class_road.html#aa2c203d3889264616268b0103c677e15" title="Road.UpdateGameObjectAnd\lOtherIntersection" alt="" coords="233,173,428,214"/>
+<area shape="rect" id="node6" href="$class_road.html#aaa6752791774d5b9980234773d902e68" title="Road.otherIntersection" alt="" coords="253,239,408,265"/>
+<area shape="rect" id="node7" href="$class_intersection.html#a5c3a5a0cbdec40c7555ba44ebc2dec9a" title="Intersection.IsDirectlyConnectedTo" alt="" coords="491,239,719,265"/>
+<area shape="rect" id="node8" href="$class_intersection_manager.html#a9d79e0711e98974f1d9b4838e679dfbf" title="IntersectionManager.canConnect\lTwoIntersections" alt="" coords="769,231,983,273"/>
+<area shape="rect" id="node9" href="$class_intersection_manager.html#ae34b07bdaf9fd0b1dda98cdb0994792b" title="IntersectionManager.create\lTemporaryConnection" alt="" coords="1038,198,1218,239"/>
+<area shape="rect" id="node10" href="$class_intersection_manager.html#abeb7011cd8ecd11d655c8f82b74ed413" title="IntersectionManager.connect\lTwoIntersections" alt="" coords="1033,263,1223,305"/>
+</map>
