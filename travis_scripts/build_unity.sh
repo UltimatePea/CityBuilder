@@ -1,6 +1,6 @@
 #! /bin/sh
 
-project="<YOUR PROJECT NAME HERE>"
+project="City Builder"
 
 echo "Attempting to build $project for Windows"
 /Applications/Unity/Unity.app/Contents/MacOS/Unity 
@@ -37,6 +37,7 @@ cat $(pwd)/unity.log
 
 
 echo 'Attempting to zip builds'
-zip -r $(pwd)/Build/linux.zip $(pwd)/Build/linux/
-zip -r $(pwd)/Build/mac.zip $(pwd)/Build/osx/
-zip -r $(pwd)/Build/windows.zip $(pwd)/Build/windows/
+mkdir $(pwd)/docs/build
+zip -r $(pwd)/docs/build/linux.zip $(pwd)/Build/linux/
+zip -r $(pwd)/docs/build/mac.zip $(pwd)/Build/osx/
+zip -r $(pwd)/docs/build/windows.zip $(pwd)/Build/windows/
