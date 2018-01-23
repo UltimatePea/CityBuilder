@@ -551,8 +551,9 @@ GameObject:
   - component: {fileID: 2082548761}
   - component: {fileID: 2082548758}
   - component: {fileID: 2082548762}
-  - component: {fileID: 2082548763}
   - component: {fileID: 2082548764}
+  - component: {fileID: 2082548763}
+  - component: {fileID: 2082548765}
   m_Layer: 0
   m_Name: Controllers
   m_TagString: Controller
@@ -654,3 +655,18 @@ MonoBehaviour:
   buildingManager: {fileID: 600529201}
   buildingPrefab: {fileID: 1700060615239528, guid: cd54b28750a9d4ee5a9e69279737b989,
     type: 2}
+--- !u!114 &2082548765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 2082548757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e5c433aed1574c8faf4a67457c94a0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainCamera: {fileID: 664378858}
+  trafficManager: {fileID: 600529199}
+  backDistance: 3
+  upDisatnce: 1

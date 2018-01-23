@@ -21,6 +21,12 @@ public class CarTrafficManager : MonoBehaviour
 		roadControlForRoad (car.position.referenceRoad).AddCar (car);
 	}
 
+
+	public List<AbstractCar> GetAllCars()
+	{
+		return cars;
+	}
+
 	public void Update ()
 	{
 

@@ -27,6 +27,7 @@
           </e>
           <e p="Controllers" t="Include">
             <e p="BuildingAdditionController.cs" t="Include" />
+            <e p="CameraController.cs" t="Include" />
             <e p="GameModeController.cs" t="Include" />
             <e p="MapGeneractionController.cs" t="Include" />
             <e p="MouseCollisionDetection.cs" t="Include" />
